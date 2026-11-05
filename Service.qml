@@ -6,6 +6,7 @@ import Quickshell.Io
 import "system"
 import "core/environments.mjs" as EnvironmentsCore
 import "core/appearance.mjs" as AppearanceCore
+import "core/workspaces.mjs" as WorkspacesCore
 import "core/i18n.mjs" as I18nCore
 
 // Entrada `service` do plugin (keepLoaded: specs/14-spikes.md, S6). Vive até
@@ -68,6 +69,43 @@ Item {
 
   function applyAppearancePreset(id) {
     settingsStore.values.appearance = AppearanceCore.appearancePreset(id);
+  }
+
+  // Widget de workspaces (spec 16): o modo, o teto de ícones e os ajustes de
+  // desenho que a aba Aparência edita. Como na aparência, a chave e a faixa de
+  // cada valor são do serviço, não do chamador.
+
+  /** `used` (só as usadas) ou `all` (todos os números da faixa). */
+  function setWorkspaceMode(id) {
+    settingsStore.values.wsShowEmpty = WorkspacesCore.showEmptyFor(id);
+  }
+
+  /** Teto de ícones por pílula; 0 é sem teto. */
+  function setWorkspaceIconLimit(limit) {
+    settingsStore.values.wsMaxIcons = WorkspacesCore.clampNumber(limit, 0, 8, 0);
+  }
+
+  function setWorkspaceIconSize(size) {
+    settingsStore.values.wsIconSize = WorkspacesCore.clampNumber(size, 6, 24, 12);
+  }
+
+  function setWorkspaceIconGap(gap) {
+    settingsStore.values.wsIconGap = WorkspacesCore.clampNumber(gap, 0, 12, 4);
+  }
+
+  /** Bandeiras do widget; a chave tem de estar na allowlist. */
+  function setWorkspaceFlag(key, on) {
+    const name = String(key);
+    if (WorkspacesCore.FLAGS.indexOf(name) === -1) {
+      console.warn("Island: blocked workspaces flag:", name);
+      return;
+    }
+    settingsStore.values[name] = !!on;
+  }
+
+  /** Texto da pílula do scratchpad: uma linha, no máximo quatro caracteres. */
+  function setWorkspaceScratchpadLabel(label) {
+    settingsStore.values.wsScratchpadLabel = String(label || "").replace(/[\r\n\t]/g, " ").slice(0, 4);
   }
 
   StateStore {
