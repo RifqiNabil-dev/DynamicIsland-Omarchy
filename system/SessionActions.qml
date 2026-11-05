@@ -30,9 +30,24 @@ Scope {
     Quickshell.execDetached(["omarchy", "menu", "summon", "setup"]);
   }
 
-  /** Terminal flutuante do Omarchy: rede enterprise (`nmtui`) e PIN de Bluetooth. */
-  function openInTerminal(command) {
-    Quickshell.execDetached(["omarchy-launch-floating-terminal-with-presentation", command]);
+  /** Terminal flutuante do Omarchy com ação tipada (sem comando arbitrário). */
+  function openInTerminal(action, value) {
+    const key = String(action || "").trim();
+    if (key === "nmtui-connect") {
+      const ssid = String(value || "").trim();
+      if (ssid === "") {
+        console.warn("Island: blocked openInTerminal nmtui-connect without ssid");
+        return false;
+      }
+      Quickshell.execDetached(["omarchy-launch-floating-terminal-with-presentation", "nmtui", "connect", ssid]);
+      return true;
+    }
+    if (key === "bluetoothctl") {
+      Quickshell.execDetached(["omarchy-launch-floating-terminal-with-presentation", "bluetoothctl"]);
+      return true;
+    }
+    console.warn("Island: blocked openInTerminal action:", key);
+    return false;
   }
 
   Process {

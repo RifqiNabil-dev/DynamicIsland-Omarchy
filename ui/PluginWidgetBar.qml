@@ -75,8 +75,24 @@ QtObject {
     return String(id || "") === moduleName ? host.instancesOf(moduleName) : [];
   }
 
-  // Como `Util.execDetached` do Omarchy: shell de login, sem esperar.
+  // Segurança: não executa shell arbitrário vindo de widgets de terceiros.
+  // Só permite ações explícitas em allowlist.
   function run(command) {
-    if (command) Quickshell.execDetached(["bash", "-lc", String(command)]);
+    const key = String(command || "").trim();
+    const allowed = {
+      "omarchy menu summon setup": ["omarchy", "menu", "summon", "setup"],
+      "omarchy-system-lock": ["omarchy-system-lock"],
+      "omarchy-system-logout": ["omarchy-system-logout"],
+      "omarchy-system-reboot": ["omarchy-system-reboot"],
+      "omarchy-system-shutdown": ["omarchy-system-shutdown"],
+      "systemctl suspend": ["systemctl", "suspend"]
+    };
+    const argv = allowed[key];
+    if (!argv) {
+      console.warn("Island: blocked PluginWidgetBar.run command:", key);
+      return false;
+    }
+    Quickshell.execDetached(argv);
+    return true;
   }
 }

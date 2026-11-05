@@ -48,11 +48,38 @@ Scope {
     dnsProc.running = true;
   }
 
+  function isValidDnsToken(token) {
+    const value = String(token || "").trim();
+    if (value === "") return false;
+
+    // IPv4 estrito (0-255 por octeto).
+    const ipv4 = /^(?:\d{1,3}\.){3}\d{1,3}$/;
+    if (ipv4.test(value)) {
+      const octets = value.split(".").map(Number);
+      return octets.every(n => Number.isInteger(n) && n >= 0 && n <= 255);
+    }
+
+    // IPv6 literal (forma curta/longa com ':').
+    const ipv6 = /^[0-9a-fA-F:]+$/;
+    if (value.includes(":")) {
+      return ipv6.test(value) && value.length <= 39;
+    }
+
+    return false;
+  }
+
   /** `omarchy-dns Custom` lê os servidores da entrada padrão. */
   function setCustomDns(servers) {
     const trimmed = String(servers).trim();
     if (dnsProc.running || trimmed === "") return;
-    dnsProc.servers = trimmed;
+
+    const tokens = trimmed.split(/[\s,]+/).filter(Boolean);
+    if (tokens.length === 0 || tokens.length > 4 || !tokens.every(isValidDnsToken)) {
+      console.warn("Island: blocked invalid custom DNS input");
+      return;
+    }
+
+    dnsProc.servers = tokens.join(" ");
     dnsProc.command = ["omarchy-dns", "Custom"];
     dnsProc.running = true;
   }
