@@ -3,7 +3,6 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 import "../core/wifi.mjs" as WifiCore
-import "../core/shellQuote.mjs" as ShellQuote
 
 // Modo `wifi` (specs/08-controles-rapidos.md "Modo `wifi`"; design v5): linha
 // de controles · linha de energia · divisor · cabeçalho da rede · estatísticas,
@@ -165,7 +164,7 @@ ColumnLayout {
   // num terminal flutuante pede as credenciais.
   function openEnterprise(ssid) {
     bar.closeAll();
-    bar.system.session.openInTerminal("nmtui connect " + ShellQuote.shellQuote(ssid));
+    bar.system.session.openInTerminal("nmtui-connect", ssid);
   }
 
   function submit(ssid, password) {
