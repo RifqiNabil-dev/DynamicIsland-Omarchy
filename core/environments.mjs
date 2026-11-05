@@ -9,6 +9,7 @@ export const WIDGET_IDS = [
     'event',
     'pomodoro',
     'music',
+    'workspaces',
     'github',
     'progress',
     'countdown',
@@ -34,6 +35,11 @@ export const WIDGET_CATALOG = {
     },
     pomodoro: { name: msg('Pomodoro'), icon: 'timer', description: msg('Focus and break cycles') },
     music: { name: msg('Music'), icon: 'music-note', description: msg('What is playing now') },
+    workspaces: {
+        name: msg('Workspaces'),
+        icon: 'frame-corners',
+        description: msg('Active Hyprland workspaces with app icons'),
+    },
     github: { name: msg('GitHub'), icon: 'github-logo', description: msg('PRs awaiting review') },
     progress: {
         name: msg('Day progress'),
@@ -64,7 +70,7 @@ export const MAX_NAME_LENGTH = 20;
 // Os nomes saem no idioma da interface; editado, o ambiente guarda o nome
 // como está.
 const DEFAULT_ENVIRONMENTS = [
-    { name: msg('Default'), icon: 'house', left: ['ai'], right: ['hw'] },
+    { name: msg('Default'), icon: 'house', left: ['workspaces', 'ai'], right: ['hw'] },
     {
         name: msg('Work'),
         icon: 'briefcase',

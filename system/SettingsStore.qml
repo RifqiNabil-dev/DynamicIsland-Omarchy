@@ -66,6 +66,15 @@ Scope {
       property string countdownName: ""
       // `AAAA-MM-DD` ou vazio.
       property string countdownDate: ""
+      // Widget de workspaces (spec 16): só os usados, escopo por monitor e o
+      // número máximo de logos por pílula.
+      property bool wsPerMonitor: true
+      property bool wsShowEmpty: false
+      property bool wsShowIcons: true
+      property int wsMaxIcons: 0
+      property int wsMaxId: 10
+      property int wsIconSize: 12
+      property bool wsScratchpad: true
     }
     // qmllint enable unresolved-type
   }

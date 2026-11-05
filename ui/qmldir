@@ -95,3 +95,4 @@ WifiHeader 1.0 WifiHeader.qml
 WifiInfoArea 1.0 WifiInfoArea.qml
 WifiNetworkEntry 1.0 WifiNetworkEntry.qml
 WifiView 1.0 WifiView.qml
+WorkspacesWidget 1.0 WorkspacesWidget.qml
