@@ -29,11 +29,63 @@ WidgetFrame {
   property int iconSize: 12
   property bool showScratchpad: true
   property string scratchpadName: "special:scratchpad"
+  // Numeração local (como `localWorkspaceNumbers` do advanced-workspaces): cada
+  // barra conta a partir de 1, então dois monitores aparecem na mesma escala em
+  // vez de 1-3 num e 12 no outro.
+  property bool localNumbers: true
+  property int perMonitorIds: 10
+  // Espaço entre dois logos na pílula (para não se encostarem).
+  property int iconGap: 4
+  // Texto da pílula do scratchpad; `""` deixa só os ícones.
+  property string scratchpadLabel: "S"
 
   spacing: 3
   implicitHeight: 22
 
   readonly property bool focused: !widget.source || widget.source.isFocusedMonitor(widget.screenName)
+
+  // Numeração local por faixas: a barra de cada monitor conta a partir de 1 na
+  // faixa de ids onde os seus workspaces vivem, então dois monitores aparecem na
+  // mesma escala (1-5 e 1-5) em vez de 1-3 de um lado e 12 do outro.
+  //
+  // `perMonitorIds` > 0 fixa o tamanho da faixa; 0 divide `maxWorkspaceId` pelo
+  // número de monitores.
+  readonly property int bankSize: {
+    const count = widget.source ? Math.max(1, widget.source.monitors.length) : 1;
+    if (widget.perMonitorIds > 0) return widget.perMonitorIds;
+    return Math.max(1, Math.ceil(widget.maxWorkspaceId / count));
+  }
+
+  /** Primeiro id da faixa deste monitor: o bloco que contém o menor id dele. */
+  readonly property int bankFirst: {
+    const _ = widget.source ? widget.source.revision : 0;
+    if (!widget.source || !widget.perMonitor) return 1;
+    const size = widget.bankSize;
+    let anchor = -1;
+    const values = widget.source.workspaces;
+    for (let i = 0; i < values.length; i++) {
+      const ws = values[i];
+      if (ws.id <= 0) continue;
+      if (String(ws.name || "").indexOf("special:") === 0) continue;
+      if (widget.source.monitorName(ws) !== widget.screenName) continue;
+      if (anchor < 0 || ws.id < anchor) anchor = ws.id;
+    }
+    // Sem workspace vivo, a faixa sai da posição do monitor na lista.
+    if (anchor < 0) {
+      const index = Math.max(0, widget.source.monitorIndex(widget.screenName));
+      anchor = index * size + 1;
+    }
+    return size * Math.floor((anchor - 1) / size) + 1;
+  }
+
+  /** Número mostrado na pílula: id global, ou a contagem local da barra. */
+  function labelFor(id) {
+    const value = Number(id);
+    if (!widget.localNumbers) return String(value);
+    if (widget.perMonitor) return String(value - widget.bankFirst + 1);
+    const per = Math.max(1, widget.perMonitorIds > 0 ? widget.perMonitorIds : widget.maxWorkspaceId);
+    return String(((value - 1) % per + per) % per + 1);
+  }
 
   // Ids visíveis, em ordem. O estado do Hyprland não é reativo por si só, daí
   // a leitura de `revision` no topo (reavalia a cada evento).
@@ -63,17 +115,10 @@ WidgetFrame {
 
     if (widget.showEmpty) {
       // Hyprland só reporta workspaces criados; os vazios têm de ser
-      // sintetizados. Com `perMonitor`, cada monitor fica com a sua faixa
-      // (1-5, 6-10…), que é o layout padrão do Omarchy.
-      let first = 1;
-      let last = widget.maxWorkspaceId;
-      const count = widget.source.monitors.length;
-      const index = widget.source.monitorIndex(widget.screenName);
-      if (widget.perMonitor && count > 1 && index >= 0) {
-        const per = Math.max(1, Math.floor(widget.maxWorkspaceId / count));
-        first = index * per + 1;
-        last = Math.min(widget.maxWorkspaceId, first + per - 1);
-      }
+      // sintetizados. Com `perMonitor` a faixa é a deste monitor (a mesma que
+      // numera as pílulas), então as duas barras mostram a mesma contagem.
+      const first = widget.perMonitor ? widget.bankFirst : 1;
+      const last = widget.perMonitor ? first + widget.bankSize - 1 : widget.maxWorkspaceId;
       for (let id = first; id <= last; id++) {
         if (ids.indexOf(id) === -1) ids.push(id);
       }
@@ -127,9 +172,13 @@ WidgetFrame {
         IslandText {
           Layout.alignment: Qt.AlignVCenter
           px: 11
-          text: String(pill.modelData)
+          text: widget.labelFor(pill.modelData)
           color: pill.current ? Tokens.bg : Tokens.neutral300
         }
+
+        RowLayout {
+          Layout.alignment: Qt.AlignVCenter
+          spacing: widget.iconGap
 
         Repeater {
           model: widget.showIcons ? widget.source.iconsFor(pill.workspace, widget.maxIcons) : []
@@ -179,6 +228,7 @@ WidgetFrame {
             }
           }
         }
+        }
       }
 
       MouseArea {
@@ -219,9 +269,14 @@ WidgetFrame {
       IslandText {
         Layout.alignment: Qt.AlignVCenter
         px: 11
-        text: "S"
+        text: widget.scratchpadLabel
+        visible: widget.scratchpadLabel !== ""
         color: scratchPill.open ? Tokens.bg : Tokens.neutral300
       }
+
+      RowLayout {
+        Layout.alignment: Qt.AlignVCenter
+        spacing: widget.iconGap
 
       Repeater {
         model: widget.showIcons && widget.scratchpad ? widget.source.iconsFor(widget.scratchpad, widget.maxIcons) : []
@@ -270,6 +325,7 @@ WidgetFrame {
             color: scratchPill.open ? Tokens.bg : Tokens.neutral300
           }
         }
+      }
       }
     }
 

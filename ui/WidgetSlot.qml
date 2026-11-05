@@ -190,6 +190,10 @@ Item {
       maxWorkspaceId: settings ? settings.wsMaxId : 10
       iconSize: settings ? settings.wsIconSize : 12
       showScratchpad: settings ? settings.wsScratchpad : true
+      localNumbers: settings ? settings.wsLocalNumbers : true
+      perMonitorIds: settings ? settings.wsPerMonitorIds : 0
+      iconGap: settings ? settings.wsIconGap : 4
+      scratchpadLabel: settings ? settings.wsScratchpadLabel : "S"
     }
   }
 
