@@ -18,7 +18,6 @@ SettingRow {
     ChoiceButton {
       required property var modelData
 
-      Layout.preferredWidth: 88
       label: modelData.label
       active: row.current === modelData.id
       onClicked: row.chosen(modelData.id)
