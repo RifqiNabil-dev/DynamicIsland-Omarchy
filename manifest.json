@@ -1,16 +1,24 @@
 {
   "schemaVersion": 1,
-  "id": "caionazario.island",
+  "id": "alfath.island",
   "name": "Island Desktop",
-  "version": "0.8.3",
-  "author": "Caio Nazario",
+  "version": "0.8.4",
+  "author": "Rifqi Nabil",
   "license": "GPL-3.0-or-later",
   "description": "A Dynamic Island for your Omarchy bar. Three floating pills expand into panels for media, calendar, notifications, volume and per-app audio, Wi-Fi and network stats, battery and power profiles, quick toggles, and Claude/Codex AI usage. Themed from your Omarchy colors, with selectable palettes.",
-  "kinds": ["bar", "service"],
+  "kinds": [
+    "bar",
+    "service"
+  ],
   "keepLoaded": true,
   "entryPoints": {
     "bar": "Bar.qml",
     "service": "Service.qml"
   },
-  "tags": ["desktop", "appearance", "media", "productivity"]
+  "tags": [
+    "desktop",
+    "appearance",
+    "media",
+    "productivity"
+  ]
 }

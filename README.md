@@ -4,7 +4,9 @@ A bar plugin for **[Omarchy](https://omarchy.org/)** (Hyprland + Quickshell) tha
 
 The middle pill, the **Island**, works like a Dynamic Island for the desktop: it grows and shrinks with the context and brings together notifications, music, volume, brightness, calendar, quick controls and other system information. The side pills show widgets, grouped into **environments** you switch with a swipe or a shortcut.
 
-![The Island bar with the music and calendar card open](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/hero.png)
+![The Island bar with the music and calendar card open](docs/screenshots/hero.png)
+
+> **Personal copy.** My own standalone maintenance copy of Island Desktop, installed as the plugin `alfath.island`. All credit for the original project goes to Caio Nazario — see [Credits and upstream](#credits-and-upstream).
 
 ---
 
@@ -32,23 +34,23 @@ Only one mode is open at a time.
 
 | Music and calendar | AI usage |
 |---|---|
-| ![The center card with music and the calendar](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/center-card.png) | ![AI usage](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/ai.png) |
+| ![The center card with music and the calendar](docs/screenshots/center-card.png) | ![AI usage](docs/screenshots/ai.png) |
 
 | Wi‑Fi | Bluetooth |
 |---|---|
-| ![Quick controls with the Wi‑Fi panel](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/quick-wifi.png) | ![Quick controls with the Bluetooth panel](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/bluetooth.png) |
+| ![Quick controls with the Wi‑Fi panel](docs/screenshots/quick-wifi.png) | ![Quick controls with the Bluetooth panel](docs/screenshots/bluetooth.png) |
 
 | Volume mixer | Battery |
 |---|---|
-| ![Volume mixer](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/mixer.png) | ![Battery](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/battery.png) |
+| ![Volume mixer](docs/screenshots/mixer.png) | ![Battery](docs/screenshots/battery.png) |
 
 ### Environments
 
 An environment is a named set of widgets for the two side pills. The left pill starts with the environment button, followed by the environment's widgets; the right pill holds the environment's widgets next to the fixed buttons (notifications, Wi‑Fi, volume, battery and quick controls). Only one environment is active at a time, the same on every monitor.
 
-![The bar in the default environment](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/bar-default.png)
+![The bar in the default environment](docs/screenshots/bar-default.png)
 
-![The bar in a custom environment with music and widgets from other plugins](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/bar-plugins.png)
+![The bar in a custom environment with music and widgets from other plugins](docs/screenshots/bar-plugins.png)
 
 Island ships with four:
 
@@ -119,7 +121,7 @@ Click the environment button, at the start of the left pill, to open the editor.
 - Choose which pill a click adds to (left or right)
 - Reorder widgets by dragging them on the bar itself, or click a widget on the bar to move it one step, send it to the other pill or remove it
 
-![The environment editor](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/editor.png)
+![The environment editor](docs/screenshots/editor.png)
 
 Every change is saved right away. **Done**, `Esc`, a click on the dimmed background or another click on the environment button closes the editor.
 
@@ -131,7 +133,7 @@ The interface is in English by default. The **Language** switch in the footer of
 
 The **Appearance** tab of the editor styles the pills, the Island and the notification banner together. Each section only shows the controls that apply to the current choice, and every change shows up on the bar as you make it.
 
-![The Appearance tab of the editor](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/appearance.png)
+![The Appearance tab of the editor](docs/screenshots/appearance.png)
 
 - **Size**: Automatic, Small, Medium or Large. It scales the whole Island UI (bar, open Island, panels and editor). On Automatic, each monitor gets its own size: small on laptops and fractional scaling, large on QHD and 4K at scale 1. On small monitors the size drops until everything fits.
 - **Style**: two presets. *Default* is the original design and undoes every tweak; *Glass* is a gradient with film grain.
@@ -143,9 +145,9 @@ The **Appearance** tab of the editor styles the pills, the Island and the notifi
 
 The same bar with a gradient background and with a solid one:
 
-![The bar with a gradient background](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/bar-default.png)
+![The bar with a gradient background](docs/screenshots/bar-default.png)
 
-![The bar with a solid background](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/bar-solid.png)
+![The bar with a solid background](docs/screenshots/bar-solid.png)
 
 Everything is stored under `appearance` in `~/.config/island/settings.json`. Without any change, the bar looks like the original design.
 
@@ -196,7 +198,7 @@ Without a city, the weather disappears from the Island (there's no IP geolocatio
 
 Open them with the arrow on the right pill or with `Super+S`.
 
-![Quick controls](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/quick.png)
+![Quick controls](docs/screenshots/quick.png)
 
 They include:
 
@@ -211,7 +213,7 @@ They include:
 - Settings (Omarchy's setup menu)
 - Power: suspend, restart, shut down, log out and lock, through Omarchy's commands
 
-![The power row](https://raw.githubusercontent.com/CaioNazario/island-omarchy/dev/docs/screenshots/power.png)
+![The power row](docs/screenshots/power.png)
 
 Omarchy's volume and brightness keys open the Island instead of Omarchy's OSD. Other OSD messages (microphone, shutting down…) show up in a mode of their own.
 
@@ -327,8 +329,8 @@ design/         Design reference extracted from the prototype
 ## Installation
 
 ```bash
-omarchy plugin add https://github.com/CaioNazario/island-omarchy.git
-omarchy plugin enable caionazario.island
+omarchy plugin add https://github.com/RifqiNabil-dev/DynamicIsland-Omarchy.git
+omarchy plugin enable alfath.island
 ```
 
 The Island takes over notifications and the OSD. Disable the Omarchy plugins that do the same, so two servers don't compete for the same IPC targets:
@@ -343,7 +345,7 @@ omarchy plugin disable omarchy.osd
 The plugin ships the Island's shortcuts and gestures in `hypr/island.lua`. To turn them on, add this to the end of `~/.config/hypr/hyprland.lua`:
 
 ```lua
-dofile(os.getenv("HOME") .. "/.config/omarchy/plugins/caionazario.island/hypr/island.lua")
+dofile(os.getenv("HOME") .. "/.config/omarchy/plugins/alfath.island/hypr/island.lua")
 ```
 
 - `Super+S`: quick controls (takes this key away from Omarchy's scratchpad)
@@ -356,30 +358,18 @@ Since the file lives inside the plugin, `omarchy plugin update` updates the shor
 
 Settings live in `~/.config/island/settings.json` (a settings window isn't available yet). Changes to the file apply right away.
 
-### From source
+### This copy
 
-Building needs Node.js and npm (CI uses Node 26).
+This repository is a personal, standalone copy of Island Desktop. It ships the built plugin at the repository root, so `omarchy plugin add` installs it as is — there is no build step. It carries the security hardening from a local audit and the plugin id `alfath.island`; settings still live in `~/.config/island`, so an earlier install's settings carry over.
 
-```bash
-git clone -b dev https://github.com/CaioNazario/island-omarchy.git
-cd island-omarchy
-
-npm ci
-./install.sh
-```
-
-`install.sh` builds the plugin, copies it to `~/.config/omarchy/plugins/caionazario.island/`, turns off Omarchy's notifications and OSD, and switches the bar. The shell reloads by itself, without logging out.
-
-It also installs the shortcuts and gestures: it copies `hypr/island.lua` to `~/.config/hypr/island.lua` and adds `require("hypr.island")` to the end of `~/.config/hypr/hyprland.lua`, with a backup. `./install.sh --uninstall` removes the line and the file, goes back to Omarchy's bar and turns its notifications and OSD back on.
-
-To update a source install: `git pull`, `npm ci` and `./install.sh` again.
+To update it: `omarchy plugin update alfath.island`.
 
 ---
 
 ## Updating
 
 ```bash
-omarchy plugin update caionazario.island
+omarchy plugin update alfath.island
 ```
 
 ---
@@ -389,7 +379,7 @@ omarchy plugin update caionazario.island
 Remove the plugin, then bring back Omarchy's bar, notifications and OSD:
 
 ```bash
-omarchy plugin remove caionazario.island
+omarchy plugin remove alfath.island
 omarchy plugin enable omarchy.bar
 omarchy plugin enable omarchy.notifications
 omarchy plugin enable omarchy.osd
@@ -432,24 +422,22 @@ Currently:
 
 ## Development
 
+The build harness (npm, `make`, `install.sh`, the nested Hyprland runner) is not part of this copy. What can be checked in place:
+
 ```bash
-npm ci
-make test    # Vitest on src/core
-make lint    # ESLint, Prettier, tsc, the core modules in the QML engine, and qmllint
-make build   # dist/caionazario.island/
-make dev     # nested Hyprland in a window, running the plugin through the dev/ harness
-make smoke   # the same without interaction: 5 hot reloads, fails on any error in the log
+for f in $(git ls-files '*.mjs'); do node --check "$f"; done   # JavaScript modules
+omarchy plugin validate .                                       # manifest, entry points, symlinks
 ```
 
-The harness runs on its own D-Bus, with `XDG_CONFIG_HOME`/`XDG_STATE_HOME` under `dist/xdg`: it doesn't compete for your session's notifications or write to your settings. To drive the Island from outside: `scripts/nested.sh serve`, `scripts/nested.sh ipc dev open quick`, `scripts/nested.sh notify "Title" "Body"`, `scripts/nested.sh shot` and `scripts/nested.sh stop`.
-
-The source lives on the [`dev`](https://github.com/CaioNazario/island-omarchy/tree/dev) branch; `main` only holds the built plugin, one `build: vX.Y.Z` commit per release.
+`main` holds the built plugin at the root, the same layout the upstream project publishes.
 
 ---
 
-## Specs and design
+## Credits and upstream
 
-The Island's behavior is documented in [`specs/`](https://github.com/CaioNazario/island-omarchy/tree/dev/specs), starting with [`specs/00-visao-geral.md`](https://github.com/CaioNazario/island-omarchy/blob/dev/specs/00-visao-geral.md). The visual reference is in [`design/`](https://github.com/CaioNazario/island-omarchy/tree/dev/design), and the development conventions in [`AGENTS.md`](https://github.com/CaioNazario/island-omarchy/blob/dev/AGENTS.md). Specs and conventions are written in Brazilian Portuguese.
+Island Desktop is written by **Caio Nazario** and lives at [CaioNazario/island-omarchy](https://github.com/CaioNazario/island-omarchy). The behavior specs (`specs/`), the visual reference (`design/`) and the development conventions (`AGENTS.md`) are in that project's `dev` branch, written in Brazilian Portuguese.
+
+This copy keeps the GPL notices and the original attribution intact. What changed here: the plugin id (`caionazario.island` → `alfath.island`), the documentation paths, and the security hardening of the Wi-Fi SSID, album-art and clipboard-clear paths.
 
 ---
 
@@ -461,12 +449,12 @@ Logs of the Omarchy shell, where the plugin runs:
 qs log -p /usr/share/omarchy/shell
 ```
 
-Harness logs: `dist/dev.log`.
-
 ---
 
 ## License
 
 GPL-3.0-or-later
 
-The shaders and part of the appearance formulas come from [omadock](https://github.com/thepathless/omadock) (MIT); the license notice is in [`plugin/NOTICE`](https://github.com/CaioNazario/island-omarchy/blob/dev/plugin/NOTICE).
+Island Desktop © Caio Nazario. Personal maintenance copy by Rifqi Nabil ([RifqiNabil-dev](https://github.com/RifqiNabil-dev)), published standalone.
+
+The shaders and part of the appearance formulas come from [omadock](https://github.com/thepathless/omadock) (MIT); the license notice is in [`NOTICE`](NOTICE).
