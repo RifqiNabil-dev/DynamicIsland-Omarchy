@@ -51,7 +51,7 @@ Scope {
       property var environments: []
       property int environmentIndex: 0
       property bool autoHide: false
-      // `en` ou `pt-BR` (specs/13 "Idioma"; `LANGUAGE_IDS` em i18n.ts).
+      // `en` atau `id` (specs/13 "Idioma"; `LANGUAGE_IDS` di i18n.mjs).
       property string language: "en"
       // `auto`, `small`, `medium` ou `large` (spec 02 "Tamanho"; `BAR_SIZE_IDS` em barZoom.ts).
       property string barSize: "auto"

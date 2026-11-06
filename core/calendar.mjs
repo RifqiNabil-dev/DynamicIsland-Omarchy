@@ -112,9 +112,7 @@ export function nextEvent(events, now, lang) {
         : formatClock(next.start, lang);
     return { label: next.summary, sub };
 }
-/** `Today, Fri 25`; em português `Hoje, sex, 25`, minúsculo como no design. */
+/** `Today, Fri 25`; dalam bahasa Indonesia `Hari ini, Jum 25`. */
 export function todayTitle(today, lang) {
-    const day = formatDay(today, lang);
-    const shown = lang === 'pt-BR' ? `${day.charAt(0).toLowerCase()}${day.slice(1)}` : day;
-    return tr(lang, 'Today, {day}', { day: shown });
+    return tr(lang, 'Today, {day}', { day: formatDay(today, lang) });
 }

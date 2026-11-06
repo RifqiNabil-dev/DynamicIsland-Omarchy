@@ -246,7 +246,7 @@ change up immediately. Atomic writes, so a crash mid-write cannot leave half a f
 
 | Key | Default | Notes |
 | --- | --- | --- |
-| `language` | `"en"` | `en` or `pt-BR` |
+| `language` | `"en"` | `en` or `id` |
 | `clickAction` | `"card"` | `card` or `calendar` |
 | `barSize` | `"auto"` | `auto`, `small`, `medium`, `large` |
 | `theme` | `"Nocturne"` | or `"Alto contraste"` in the file (shown as High contrast) |

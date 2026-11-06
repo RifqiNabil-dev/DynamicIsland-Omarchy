@@ -271,7 +271,7 @@ ColumnLayout {
     }
 
     SegmentedSwitch {
-      options: [{ id: "en", label: "English" }, { id: "pt-BR", label: "Português" }]
+      options: [{ id: "en", label: "English" }, { id: "id", label: "Indonesian" }]
       current: I18n.language
       onChosen: id => page.bar.setLanguage(id)
     }

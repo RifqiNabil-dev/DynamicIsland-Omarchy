@@ -24,12 +24,11 @@ export function formatSessionReset(resetsAt, now, lang) {
         ? tr(lang, 'in {h}h', { h: hours })
         : tr(lang, 'in {h}h {m}m', { h: hours, m: rest });
 }
-/** "Mon 9:00 AM" ("seg, 09:00": em português, minúsculo como no design), na hora local. */
+/** "Mon 9:00 AM" (bahasa Indonesia: "Sen 09.00"), dalam waktu lokal. */
 export function formatWeeklyReset(resetsAt, lang) {
     const date = new Date(resetsAt);
-    const weekday = weekdayShort(lang, date.getDay());
     return tr(lang, '{weekday} {time}', {
-        weekday: lang === 'pt-BR' ? weekday.toLowerCase() : weekday,
+        weekday: weekdayShort(lang, date.getDay()),
         time: formatClock(date, lang),
     });
 }

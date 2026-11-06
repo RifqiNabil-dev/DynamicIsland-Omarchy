@@ -1,10 +1,10 @@
-// Idioma da interface (specs/13-preferencias.md "Idioma"). O Omarchy não usa
-// gettext: o texto-fonte é o inglês, e `PT_BR` (i18nPtBr.ts) traduz cada
-// texto inteiro, com `{nome}` no lugar dos valores. Quem guarda um texto
-// numa tabela para traduzir depois o marca com `msg`, e o teste do catálogo
-// acha as marcas.
-import { PT_BR } from './i18nPtBr.mjs';
-export const LANGUAGE_IDS = ['en', 'pt-BR'];
+// Bahasa antarmuka (specs/13-preferencias.md "Idioma"). Omarchy tidak memakai
+// gettext: teks sumbernya bahasa Inggris, dan `ID` (i18nId.mjs) menerjemahkan
+// setiap teks utuh, dengan `{name}` sebagai tempat nilai. Siapa pun yang
+// menyimpan teks di tabel untuk diterjemahkan nanti menandainya dengan `msg`,
+// dan uji katalog menemukan tanda itu.
+import { ID } from './i18nId.mjs';
+export const LANGUAGE_IDS = ['en', 'id'];
 export function sanitizeLanguage(value) {
     var _a;
     return (_a = LANGUAGE_IDS.find((id) => id === value)) !== null && _a !== void 0 ? _a : 'en';
@@ -16,7 +16,7 @@ export function msg(text) {
 /** `{nome}` sem valor em `params` fica como está, para o erro aparecer na tela. */
 export function tr(lang, text, params = {}) {
     var _a;
-    const template = lang === 'pt-BR' ? ((_a = PT_BR[text]) !== null && _a !== void 0 ? _a : text) : text;
+    const template = lang === 'id' ? ((_a = ID[text]) !== null && _a !== void 0 ? _a : text) : text;
     return template.replace(/\{(\w+)\}/g, (whole, key) => key in params ? String(params[key]) : whole);
 }
 /** `one` com `n` igual a 1 e `other` no resto; `{n}` vira o número. */
@@ -25,7 +25,7 @@ export function trCount(lang, n, one, other, params = {}) {
 }
 const WEEKDAYS = {
     en: ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
-    'pt-BR': ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+    id: ['Min', 'Sen', 'Sel', 'Rab', 'Kam', 'Jum', 'Sab'],
 };
 const MONTHS = {
     en: [
@@ -42,19 +42,19 @@ const MONTHS = {
         'November',
         'December',
     ],
-    'pt-BR': [
-        'Janeiro',
-        'Fevereiro',
-        'Março',
-        'Abril',
-        'Maio',
-        'Junho',
-        'Julho',
-        'Agosto',
-        'Setembro',
-        'Outubro',
-        'Novembro',
-        'Dezembro',
+    id: [
+        'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember',
     ],
 };
 /** `day` como `Date.getDay()`: 0 é domingo. */
