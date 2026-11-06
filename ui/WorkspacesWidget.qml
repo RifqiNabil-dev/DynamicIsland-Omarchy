@@ -21,7 +21,7 @@ WidgetFrame {
 
   required property var source
   property string screenName: ""
-  property bool perMonitor: true
+  property bool perMonitor: false
   property bool showEmpty: false
   property bool showIcons: true
   property int maxIcons: 0
@@ -29,11 +29,10 @@ WidgetFrame {
   property int iconSize: 12
   property bool showScratchpad: true
   property string scratchpadName: "special:scratchpad"
-  // Numeração local (como `localWorkspaceNumbers` do advanced-workspaces): cada
-  // barra conta a partir de 1, então dois monitores aparecem na mesma escala em
-  // vez de 1-3 num e 12 no outro.
-  property bool localNumbers: true
-  property int perMonitorIds: 10
+  // Numeração global (como o Omarchy Linux default): cada barra mostra o id
+  // real do Hyprland, então workspace 1 é "1" em todos os monitores.
+  property bool localNumbers: false
+  property int perMonitorIds: 0
   // Espaço entre dois logos na pílula (para não se encostarem).
   property int iconGap: 4
   // Texto da pílula do scratchpad; `""` deixa só os ícones.
