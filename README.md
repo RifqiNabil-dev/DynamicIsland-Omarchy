@@ -184,8 +184,6 @@ from `omarchy-weather-location`, and with no coordinates at all it detects the a
 | Key | Default | Meaning |
 | --- | --- | --- |
 | `wsPerMonitor` | `false` | `false` shows Hyprland's global ids on every bar, like Omarchy's own workspaces widget |
-| `wsLocalNumbers` | `false` | `false` uses Hyprland ids; `true` counts from 1 on each monitor |
-| `wsPerMonitorIds` | `0` | How many ids a monitor owns when local numbers are on (0 = Hyprland's monitor rule) |
 | `wsShowEmpty` | `false` | Also draw empty workspaces — the Appearance page exposes this as Mode: Only used / All numbers |
 | `wsShowIcons` | `true` | Real window logos, folded into `+N` past the limit |
 | `wsMaxIcons` | `0` | Icons per pill, `0`–`8`, `0` = no limit |
@@ -238,8 +236,8 @@ design's look".
 | Border | On/off, Width, Automatic opacity, Border opacity |
 | Effects | Blur, Grain |
 
-The Workspaces section of the same page edits mode, icons, icons per pill, icon size and the
-"numbers from 1 on each monitor" switch — they write the `ws*` keys above.
+The Workspaces widget's own settings (mode, icons, icons per pill, icon size, per-monitor
+filtering, scratchpad) are on the **Customization** tab, not here.
 
 ## Settings
 
