@@ -66,6 +66,23 @@ Scope {
       property string countdownName: ""
       // `AAAA-MM-DD` ou vazio.
       property string countdownDate: ""
+      // Widget de workspaces (spec 16): só os usados, escopo por monitor e o
+      // número máximo de logos por pílula.
+      property bool wsPerMonitor: true
+      property bool wsShowEmpty: false
+      property bool wsShowIcons: true
+      property int wsMaxIcons: 0
+      property int wsMaxId: 10
+      property int wsIconSize: 12
+      property bool wsScratchpad: true
+      // Numeração local: cada barra conta a partir de 1 em vez de mostrar o id
+      // global do Hyprland, para os monitores ficarem consistentes entre si.
+      property bool wsLocalNumbers: true
+      // Tamanho da faixa de numeração local (`0` divide `wsMaxId` pelo número
+      // de monitores).
+      property int wsPerMonitorIds: 0
+      property int wsIconGap: 4
+      property string wsScratchpadLabel: "S"
     }
     // qmllint enable unresolved-type
   }

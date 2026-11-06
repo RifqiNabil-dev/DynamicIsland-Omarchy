@@ -30,3 +30,4 @@ WeatherSource 1.0 WeatherSource.qml
 WifiDetailsSource 1.0 WifiDetailsSource.qml
 WifiShareSource 1.0 WifiShareSource.qml
 WifiSource 1.0 WifiSource.qml
+WorkspacesSource 1.0 WorkspacesSource.qml

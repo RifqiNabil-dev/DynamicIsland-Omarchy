@@ -77,12 +77,28 @@ To switch environments:
 | Next event | Today's next event | Opens the calendar |
 | Pomodoro | 25 min focus and 5 min break cycles | Starts or pauses |
 | Music | What's playing now | Opens the music player |
+| Workspaces | The Hyprland workspaces in use, each with the app icons of its windows | Focuses the workspace |
 | GitHub | Your open PRs and how many wait for your review | — |
 | Day progress | How much of the day has passed | — |
 | Date countdown | Days until a date | — |
 | Note | A short note pinned to the bar | Edits the note |
 
 The date countdown's name and date are set in `settings.json` (`countdownName` and `countdownDate`, as `YYYY-MM-DD`).
+
+The workspaces widget follows the approach of [advanced-workspaces](https://github.com/ehlxr/advanced-workspaces) (MIT): empty workspaces stay out of the way, each pill carries the real icon of every window it holds, and each bar only shows the workspaces of its own monitor.
+
+Its `settings.json` keys are `wsPerMonitor` (only this bar's workspaces, default `true`), `wsShowEmpty` (keep every number of this bar's bank, default `false`), `wsShowIcons` (default `true`), `wsMaxIcons` (cap the icons per pill, `0` for no cap, the rest folding into `+N`), `wsMaxId` (default `10`), `wsIconSize` (default `12`), `wsIconGap` (default `4`), `wsScratchpad` (a pill for `special:scratchpad` while it holds windows, default `true`), `wsScratchpadLabel` (default `S`, `""` for icons only), `wsLocalNumbers` (label each bar from 1, default `true`) and `wsPerMonitorIds` (size of that bank; `0` splits `wsMaxId` between the monitors).
+
+```bash
+# every number, stock-like
+python3 -c "import json,pathlib;p=pathlib.Path.home()/'.config/island/settings.json';d=json.loads(p.read_text());d['wsShowEmpty']=True;p.write_text(json.dumps(d,indent=4)+chr(10))"
+# one icon per pill, the rest folding into +N
+python3 -c "import json,pathlib;p=pathlib.Path.home()/'.config/island/settings.json';d=json.loads(p.read_text());d['wsMaxIcons']=1;p.write_text(json.dumps(d,indent=4)+chr(10))"
+# Hyprland's global ids instead of the per-bar count
+python3 -c "import json,pathlib;p=pathlib.Path.home()/'.config/island/settings.json';d=json.loads(p.read_text());d['wsLocalNumbers']=False;p.write_text(json.dumps(d,indent=4)+chr(10))"
+```
+
+With `wsLocalNumbers` (the default) each bar counts from 1 inside the bank that holds its own workspaces, so a second monitor on ids 11-20 reads 1-5 like the first instead of showing `12` next to `1` and `3`.
 
 Widgets never push the Island or the fixed buttons. When space runs out, the Hardware widget drops its blocks (network, GPU, temperature), and then whole widgets disappear, starting with the one farthest from the Island.
 

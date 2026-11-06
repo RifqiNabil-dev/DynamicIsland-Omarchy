@@ -17,6 +17,7 @@ Rectangle {
   signal clicked
 
   implicitHeight: 30
+  implicitWidth: Math.max(40, (glyph !== "" ? glyphSize + 7 : 0) + text.implicitWidth + 24)
   radius: 9
   color: active ? Tokens.accent900 : pointer.containsMouse ? Tokens.neutral900 : "transparent"
   border.width: 1
