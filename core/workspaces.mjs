@@ -24,7 +24,7 @@ export function iconLimitLabel(limit) {
     return Number(limit) === 0 ? 'No limit' : String(limit);
 }
 /** Bandeiras do widget que a aba Aparência pode alternar. */
-export const FLAGS = ['wsPerMonitor', 'wsShowIcons', 'wsLocalNumbers', 'wsScratchpad'];
+export const FLAGS = ['wsPerMonitor', 'wsShowIcons', 'wsScratchpad'];
 /** Número inteiro dentro da faixa; fora dela ou não numérico, o padrão. */
 export function clampNumber(value, min, max, fallback) {
     const number = Number(value);

@@ -76,11 +76,6 @@ Scope {
       property int wsMaxId: 10
       property int wsIconSize: 12
       property bool wsScratchpad: true
-      // Numeração global: mostra o id real do Hyprland (1, 2, 3…) em cada
-      // barra, igual ao default do Omarchy Linux.
-      property bool wsLocalNumbers: false
-      // Tamanho da faixa de numeração local (só usado se wsLocalNumbers=true).
-      property int wsPerMonitorIds: 0
       property int wsIconGap: 4
       property string wsScratchpadLabel: "S"
       // Widget de música:

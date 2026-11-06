@@ -29,10 +29,6 @@ WidgetFrame {
   property int iconSize: 12
   property bool showScratchpad: true
   property string scratchpadName: "special:scratchpad"
-  // Numeração global (como o Omarchy Linux default): cada barra mostra o id
-  // real do Hyprland, então workspace 1 é "1" em todos os monitores.
-  property bool localNumbers: false
-  property int perMonitorIds: 0
   // Espaço entre dois logos na pílula (para não se encostarem).
   property int iconGap: 4
   // Texto da pílula do scratchpad; `""` deixa só os ícones.
@@ -43,15 +39,11 @@ WidgetFrame {
 
   readonly property bool focused: !widget.source || widget.source.isFocusedMonitor(widget.screenName)
 
-  // Numeração local por faixas: a barra de cada monitor conta a partir de 1 na
-  // faixa de ids onde os seus workspaces vivem, então dois monitores aparecem na
-  // mesma escala (1-5 e 1-5) em vez de 1-3 de um lado e 12 do outro.
-  //
-  // `perMonitorIds` > 0 fixa o tamanho da faixa; 0 divide `maxWorkspaceId` pelo
-  // número de monitores.
+  // Faixa de ids de cada monitor: `maxWorkspaceId` dividido pelo número de
+  // monitores. A pílula mostra sempre o id real do Hyprland; a faixa só decide
+  // quais ids a barra deste monitor desenha.
   readonly property int bankSize: {
     const count = widget.source ? Math.max(1, widget.source.monitors.length) : 1;
-    if (widget.perMonitorIds > 0) return widget.perMonitorIds;
     return Math.max(1, Math.ceil(widget.maxWorkspaceId / count));
   }
 
@@ -75,15 +67,6 @@ WidgetFrame {
       anchor = index * size + 1;
     }
     return size * Math.floor((anchor - 1) / size) + 1;
-  }
-
-  /** Número mostrado na pílula: id global, ou a contagem local da barra. */
-  function labelFor(id) {
-    const value = Number(id);
-    if (!widget.localNumbers) return String(value);
-    if (widget.perMonitor) return String(value - widget.bankFirst + 1);
-    const per = Math.max(1, widget.perMonitorIds > 0 ? widget.perMonitorIds : widget.maxWorkspaceId);
-    return String(((value - 1) % per + per) % per + 1);
   }
 
   function isWorkspaceVisibleOnOther(wsId) {
@@ -195,7 +178,7 @@ WidgetFrame {
         IslandText {
           Layout.alignment: Qt.AlignVCenter
           px: 11
-          text: widget.labelFor(pill.modelData)
+          text: String(pill.modelData)
           color: pill.current ? Tokens.bg : pill.onOther ? Tokens.neutral100 : Tokens.neutral300
         }
 

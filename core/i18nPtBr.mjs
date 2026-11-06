@@ -112,8 +112,6 @@ export const PT_BR = {
     'The rest folds into +N.': 'O resto vira +N.',
     'No limit': 'Sem limite',
     'Icon size': 'Tamanho do ícone',
-    'Numbers from 1 on each monitor': 'Números a partir de 1 em cada monitor',
-    "Each bar counts from 1; off uses Hyprland's ids.": 'Cada barra conta de 1; desligado usa os ids do Hyprland.',
     "Only this monitor's workspaces": 'Só as áreas de trabalho deste monitor',
     'Off draws them all on every bar.': 'Desligado desenha todas em cada barra.',
     'Scratchpad pill': 'Pílula do scratchpad',

@@ -96,14 +96,6 @@ RowLayout {
 
       SwitchRow {
         Layout.fillWidth: true
-        label: I18n.tr("Numbers from 1 on each monitor")
-        hint: I18n.tr("Each bar counts from 1; off uses Hyprland's ids.")
-        on: page.ws ? page.ws.wsLocalNumbers : true
-        onToggled: on => page.workspaceFlag("wsLocalNumbers", on)
-      }
-
-      SwitchRow {
-        Layout.fillWidth: true
         label: I18n.tr("Only this monitor's workspaces")
         hint: I18n.tr("Off draws them all on every bar.")
         on: page.ws ? page.ws.wsPerMonitor : true

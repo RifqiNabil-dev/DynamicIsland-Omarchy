@@ -5,7 +5,6 @@ import QtQuick.Layouts
 import "../core/appearance.mjs" as AppearanceCore
 import "../core/gradients.mjs" as GradientCore
 import "../core/themes.mjs" as ThemeCore
-import "../core/workspaces.mjs" as WorkspacesCore
 
 // Aba Aparência do editor (specs/19-aparencia.md "Aba Aparência"): seções em
 // duas colunas. Cada troca grava em `settings.json` `appearance` pelo
@@ -30,27 +29,6 @@ RowLayout {
 
   function applyPreset(id) {
     if (page.bar.service) page.bar.service.applyAppearancePreset(id);
-  }
-
-  // Widget de workspaces (spec 16): as preferências ficam no `settings.json`
-  // como as da aparência, e cada troca vale na hora.
-  readonly property var ws: page.bar.service ? page.bar.service.settings.values : null
-  readonly property bool icons: page.ws ? page.ws.wsShowIcons : true
-
-  function workspaceMode(id) {
-    if (page.bar.service) page.bar.service.setWorkspaceMode(id);
-  }
-
-  function workspaceIconLimit(limit) {
-    if (page.bar.service) page.bar.service.setWorkspaceIconLimit(limit);
-  }
-
-  function workspaceIconSize(size) {
-    if (page.bar.service) page.bar.service.setWorkspaceIconSize(size);
-  }
-
-  function workspaceFlag(key, on) {
-    if (page.bar.service) page.bar.service.setWorkspaceFlag(key, on);
   }
 
   spacing: 14
@@ -255,74 +233,6 @@ RowLayout {
       }
     }
 
-    // Widget de workspaces (spec 16). O modo, o teto de ícones e a numeração
-    // local são os mesmos do `advanced-workspaces` (MIT).
-    SettingsSection {
-      Layout.fillWidth: true
-      title: I18n.tr("Workspaces")
-
-      ChoiceRow {
-        Layout.fillWidth: true
-        label: I18n.tr("Mode")
-        hint: I18n.tr("Only used keeps the empty ones off the bar.")
-        options: WorkspacesCore.MODE_IDS.map(id => ({ id: id, label: I18n.tr(WorkspacesCore.MODE_NAMES[id]) }))
-        current: WorkspacesCore.modeOf(page.ws ? page.ws.wsShowEmpty : false)
-        onChosen: id => page.workspaceMode(id)
-      }
-
-      SwitchRow {
-        Layout.fillWidth: true
-        label: I18n.tr("Icons")
-        hint: I18n.tr("Every open window's real logo.")
-        on: page.ws ? page.ws.wsShowIcons : true
-        onToggled: on => page.workspaceFlag("wsShowIcons", on)
-      }
-
-      ChoiceRow {
-        Layout.fillWidth: true
-        visible: page.icons
-        label: I18n.tr("Icons per pill")
-        hint: I18n.tr("The rest folds into +N.")
-        options: WorkspacesCore.ICON_LIMITS.map(limit => ({ id: String(limit), label: I18n.tr(WorkspacesCore.iconLimitLabel(limit)) }))
-        current: String(page.ws ? page.ws.wsMaxIcons : 0)
-        onChosen: id => page.workspaceIconLimit(Number(id))
-      }
-
-      SliderRow {
-        Layout.fillWidth: true
-        visible: page.icons
-        label: I18n.tr("Icon size")
-        from: 6
-        to: 24
-        unit: "px"
-        value: page.ws ? page.ws.wsIconSize : 12
-        onMoved: value => page.workspaceIconSize(value)
-      }
-
-      SwitchRow {
-        Layout.fillWidth: true
-        label: I18n.tr("Numbers from 1 on each monitor")
-        hint: I18n.tr("Each bar counts from 1; off uses Hyprland's ids.")
-        on: page.ws ? page.ws.wsLocalNumbers : true
-        onToggled: on => page.workspaceFlag("wsLocalNumbers", on)
-      }
-
-      SwitchRow {
-        Layout.fillWidth: true
-        label: I18n.tr("Only this monitor's workspaces")
-        hint: I18n.tr("Off draws them all on every bar.")
-        on: page.ws ? page.ws.wsPerMonitor : true
-        onToggled: on => page.workspaceFlag("wsPerMonitor", on)
-      }
-
-      SwitchRow {
-        Layout.fillWidth: true
-        label: I18n.tr("Scratchpad pill")
-        hint: I18n.tr("While the scratchpad holds windows.")
-        on: page.ws ? page.ws.wsScratchpad : true
-        onToggled: on => page.workspaceFlag("wsScratchpad", on)
-      }
-    }
   }
 
   ColumnLayout {
