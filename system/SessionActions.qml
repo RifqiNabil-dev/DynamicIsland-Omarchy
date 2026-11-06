@@ -3,6 +3,7 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import Quickshell
 import Quickshell.Io
+import "../core/shellQuote.mjs" as ShellQuote
 
 // Configurações e linha de energia (specs/09-sessao-energia.md) pelos mesmos
 // comandos do menu de sistema do Omarchy (default/omarchy/omarchy-menu.jsonc,
@@ -34,12 +35,15 @@ Scope {
   function openInTerminal(action, value) {
     const key = String(action || "").trim();
     if (key === "nmtui-connect") {
+      // O SSID é o único dado de terceiros daqui (vem de um beacon, não do
+      // usuário) e o terminal flutuante junta os argumentos numa string de
+      // shell: sem `shellQuote`, um SSID como `$(...)` executava comando.
       const ssid = String(value || "").trim();
-      if (ssid === "") {
-        console.warn("Island: blocked openInTerminal nmtui-connect without ssid");
+      if (ssid === "" || ssid.length > 32) {
+        console.warn("Island: blocked openInTerminal nmtui-connect (empty or oversized ssid)");
         return false;
       }
-      Quickshell.execDetached(["omarchy-launch-floating-terminal-with-presentation", "nmtui", "connect", ssid]);
+      Quickshell.execDetached(["omarchy-launch-floating-terminal-with-presentation", "nmtui-connect", ShellQuote.shellQuote(ssid)]);
       return true;
     }
     if (key === "bluetoothctl") {
