@@ -198,28 +198,6 @@ Item {
   }
 
   Component {
-    id: workspacesWidget
-
-    WorkspacesWidget {
-      readonly property var settings: slot.service ? slot.service.settings.values : null
-
-      source: slot.system.workspaces
-      screenName: slot.screenName
-      perMonitor: settings ? settings.wsPerMonitor : true
-      showEmpty: settings ? settings.wsShowEmpty : false
-      showIcons: settings ? settings.wsShowIcons : true
-      maxIcons: settings ? settings.wsMaxIcons : 0
-      maxWorkspaceId: settings ? settings.wsMaxId : 10
-      iconSize: settings ? settings.wsIconSize : 12
-      showScratchpad: settings ? settings.wsScratchpad : true
-      localNumbers: settings ? settings.wsLocalNumbers : true
-      perMonitorIds: settings ? settings.wsPerMonitorIds : 0
-      iconGap: settings ? settings.wsIconGap : 4
-      scratchpadLabel: settings ? settings.wsScratchpadLabel : "S"
-    }
-  }
-
-  Component {
     id: githubWidget
 
     TopbarWidget {
