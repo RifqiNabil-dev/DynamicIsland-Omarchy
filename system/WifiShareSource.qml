@@ -18,6 +18,8 @@ Scope {
   property bool copied: false
   // Pedido de cópia esperando a senha chegar.
   property bool copyPending: false
+  // O que foi para o clipboard; só limpamos depois se ainda for isso.
+  property string copiedSecret: ""
 
   function load() {
     reset();
@@ -56,6 +58,12 @@ Scope {
       return;
     }
     copyProc.running = true;
+  }
+
+  /** Limpa o clipboard só se ele ainda contiver a senha que copiamos. */
+  function maybeClearClipboard() {
+    if (copiedSecret === "" || pasteProc.running) return;
+    pasteProc.running = true;
   }
 
   Process {
@@ -97,8 +105,39 @@ Scope {
     onExited: {
       stdinEnabled = true;
       share.copied = true;
+      // Guarda o valor copiado: a limpeza automática só age se o clipboard
+      // ainda for ele, para não apagar o que o usuário copiou depois.
+      share.copiedSecret = share.password;
       copiedTimer.restart();
+      clipboardTimer.restart();
     }
+  }
+
+  // Leitura do clipboard antes de limpar (comparação com o que copiamos).
+  Process {
+    id: pasteProc
+
+    command: ["wl-paste", "--no-newline", "--type", "text/plain"]
+    stdout: StdioCollector {
+      onStreamFinished: {
+        if (share.copiedSecret !== "" && String(text) === share.copiedSecret) clearProc.running = true;
+        else share.copiedSecret = "";
+      }
+    }
+  }
+
+  Process {
+    id: clearProc
+
+    command: ["wl-copy", "--clear"]
+    onExited: share.copiedSecret = ""
+  }
+
+  Timer {
+    id: clipboardTimer
+
+    interval: 60000
+    onTriggered: share.maybeClearClipboard()
   }
 
   Timer {
