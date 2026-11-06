@@ -105,10 +105,19 @@ WidgetFrame {
       if (id <= 0) continue;
       if (String(ws.name || "").indexOf("special:") === 0) continue;
 
+      // Em modo global (`perMonitor: false`) a pílula mostra o workspace em
+      // qualquer monitor; só filtra por monitor quando `perMonitor` está ativo.
       const owner = widget.source.monitorName(ws);
       if (widget.perMonitor && widget.screenName !== "" && owner !== "" && owner !== widget.screenName) continue;
 
-      if (!widget.showEmpty && !widget.source.hasWindows(ws) && id !== active) continue;
+      // Em modo global não escondemos um workspace só porque não tem janela
+      // neste monitor: ele pode estar ativo em outro. Em modo por-monitor,
+      // escondemos os vazios que não são o ativo desta barra.
+      if (!widget.showEmpty && !widget.source.hasWindows(ws) && id !== active) {
+        if (widget.perMonitor) continue;
+        // Global: só esconde se também não for o workspace focado em lugar
+        // nenhum (não há como saber sem monitor, então mantemos visível).
+      }
       if (ids.indexOf(id) === -1) ids.push(id);
     }
 
