@@ -66,20 +66,20 @@ Scope {
       property string countdownName: ""
       // `AAAA-MM-DD` ou vazio.
       property string countdownDate: ""
-      // Widget de workspaces (spec 16): só os usados, escopo por monitor e o
-      // número máximo de logos por pílula.
-      property bool wsPerMonitor: true
+      // Widget de workspaces (spec 16): id global do Hyprland mostrado em
+      // todas as barras (como o Omarchy Linux default), não filtrado por
+      // monitor, com o número máximo de logos por pílula.
+      property bool wsPerMonitor: false
       property bool wsShowEmpty: false
       property bool wsShowIcons: true
       property int wsMaxIcons: 0
       property int wsMaxId: 10
       property int wsIconSize: 12
       property bool wsScratchpad: true
-      // Numeração local: cada barra conta a partir de 1 em vez de mostrar o id
-      // global do Hyprland, para os monitores ficarem consistentes entre si.
-      property bool wsLocalNumbers: true
-      // Tamanho da faixa de numeração local (`0` divide `wsMaxId` pelo número
-      // de monitores).
+      // Numeração global: mostra o id real do Hyprland (1, 2, 3…) em cada
+      // barra, igual ao default do Omarchy Linux.
+      property bool wsLocalNumbers: false
+      // Tamanho da faixa de numeração local (só usado se wsLocalNumbers=true).
       property int wsPerMonitorIds: 0
       property int wsIconGap: 4
       property string wsScratchpadLabel: "S"
