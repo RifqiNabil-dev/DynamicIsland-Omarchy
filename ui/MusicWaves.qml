@@ -7,19 +7,22 @@ import "../core/waves.mjs" as WavesCore
 // Ondas da música (specs/05-musica.md "Ondas"): barras `accent` com brilho
 // de 8px que pulsam no ritmo enquanto toca e voltam a 15% ao pausar. O
 // quadro a quadro para quando as barras assentam ou o item some.
-Row {
+Item {
   id: waves
 
   property int count: 5
   property int barHeight: 20
   property int barWidth: 3
+  property alias spacing: row.spacing
   property bool playing: false
 
   property var waveState: WavesCore.createWaves(count)
   readonly property bool settled: WavesCore.wavesSettled(waveState)
 
-  spacing: 3
+  width: count * barWidth + Math.max(0, count - 1) * spacing
   height: barHeight
+  implicitWidth: width
+  implicitHeight: height
 
   onCountChanged: waveState = WavesCore.createWaves(count)
 
@@ -36,32 +39,39 @@ Row {
     }
   }
 
-  Repeater {
-    model: waves.count
+  Row {
+    id: row
 
-    Item {
-      id: column
+    anchors.fill: parent
+    spacing: 3
 
-      required property int index
+    Repeater {
+      model: waves.count
 
-      width: waves.barWidth
-      height: waves.barHeight
-      transform: Scale {
-        origin.y: column.height / 2
-        yScale: waves.waveState.levels[column.index] ?? WavesCore.WAVES_REST
-      }
+      Item {
+        id: column
 
-      RectangularShadow {
-        anchors.fill: parent
-        radius: waves.barWidth / 2
-        blur: 8
-        color: Qt.alpha(Tokens.accent, 0.45)
-      }
+        required property int index
 
-      Rectangle {
-        anchors.fill: parent
-        radius: waves.barWidth / 2
-        color: Tokens.accent
+        width: waves.barWidth
+        height: waves.barHeight
+        transform: Scale {
+          origin.y: column.height / 2
+          yScale: waves.waveState.levels[column.index] ?? WavesCore.WAVES_REST
+        }
+
+        RectangularShadow {
+          anchors.fill: parent
+          radius: waves.barWidth / 2
+          blur: 8
+          color: Qt.alpha(Tokens.accent, 0.45)
+        }
+
+        Rectangle {
+          anchors.fill: parent
+          radius: waves.barWidth / 2
+          color: Tokens.accent
+        }
       }
     }
   }

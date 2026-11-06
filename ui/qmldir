@@ -19,6 +19,7 @@ ChoiceRow 1.0 ChoiceRow.qml
 ColorSwatch 1.0 ColorSwatch.qml
 CompactContent 1.0 CompactContent.qml
 ControlsRow 1.0 ControlsRow.qml
+CustomizationPage 1.0 CustomizationPage.qml
 DeviceRow 1.0 DeviceRow.qml
 DisplayView 1.0 DisplayView.qml
 EditorCatalog 1.0 EditorCatalog.qml
@@ -47,6 +48,7 @@ MusicControls 1.0 MusicControls.qml
 MusicProgress 1.0 MusicProgress.qml
 MusicRow 1.0 MusicRow.qml
 MusicWaves 1.0 MusicWaves.qml
+MusicWidget 1.0 MusicWidget.qml
 MuteButton 1.0 MuteButton.qml
 NetworkRow 1.0 NetworkRow.qml
 NoteView 1.0 NoteView.qml

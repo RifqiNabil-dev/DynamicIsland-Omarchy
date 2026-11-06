@@ -28,8 +28,8 @@ Item {
   readonly property var system: bar.system
   readonly property var service: bar.service
   readonly property real naturalWidth: !loader.item ? 0 : widgetId === "hw" ? (loader.item as HwWidget).fullWidth : (loader.item as Item).implicitWidth
-  // Largura só com o ícone, dos widgets de `TopbarWidget` com ring ou ícone.
-  readonly property real iconWidth: (loader.item as TopbarWidget)?.compactWidth ?? 0
+  // Largura só com o ícone, dos widgets de `TopbarWidget` ou `MusicWidget` com ring ou ícone.
+  readonly property real iconWidth: (loader.item as TopbarWidget)?.compactWidth ?? (loader.item as MusicWidget)?.compactWidth ?? 0
   // Colapsado: a área deu menos que a natural a um widget que não é o `hw`.
   readonly property bool collapsed: widgetId !== "hw" && iconWidth > 0 && budget > 0 && budget < naturalWidth
   readonly property real minWidth: loader.item && widgetId === "hw" ? Math.min(naturalWidth, (loader.item as HwWidget).minWidth) : naturalWidth
@@ -78,6 +78,12 @@ Item {
     property: "compact"
     value: true
     when: slot.collapsed
+  }
+
+  Binding {
+    target: loader.item as MusicWidget
+    property: "compact"
+    value: slot.collapsed
   }
 
   Component {
@@ -155,23 +161,39 @@ Item {
   Component {
     id: musicWidget
 
-    TopbarWidget {
-      readonly property var music: slot.system.music
+    MusicWidget {
+      readonly property var settings: slot.service ? slot.service.settings.values : null
 
-      clickable: music.active
-      glyph: music.active ? music.sourceGlyph : "music-note"
-      glyphColor: music.active ? Tokens.accent400 : Tokens.neutral400
-      label: music.active ? music.title : I18n.tr("Nothing playing")
-      labelColor: music.active ? Tokens.text : Tokens.neutral400
-      labelMaxWidth: 120
-      sub: music.active ? music.artist : ""
-      waves: music.active
-      wavesPlaying: music.playing
-      endGlyph: music.active ? (music.playing ? "pause-fill" : "play-fill") : ""
-      onClicked: {
-        slot.bar.targetScreen = slot.screenName;
-        slot.bar.islandState.toggleMusicPinned();
-      }
+      source: slot.system.music
+      bar: slot.bar
+      screenName: slot.screenName
+      mode: settings ? settings.musicMode : "compact"
+      showArt: settings ? settings.musicShowArt : true
+      showWaves: settings ? settings.musicShowWaves : true
+      hideIdle: settings ? settings.musicHideIdle : false
+      maxWidth: settings ? settings.musicMaxWidth : 140
+    }
+  }
+
+  Component {
+    id: workspacesWidget
+
+    WorkspacesWidget {
+      readonly property var settings: slot.service ? slot.service.settings.values : null
+
+      source: slot.system.workspaces
+      screenName: slot.screenName
+      perMonitor: settings ? settings.wsPerMonitor : true
+      showEmpty: settings ? settings.wsShowEmpty : false
+      showIcons: settings ? settings.wsShowIcons : true
+      maxIcons: settings ? settings.wsMaxIcons : 0
+      maxWorkspaceId: settings ? settings.wsMaxId : 10
+      iconSize: settings ? settings.wsIconSize : 12
+      showScratchpad: settings ? settings.wsScratchpad : true
+      localNumbers: settings ? settings.wsLocalNumbers : true
+      perMonitorIds: settings ? settings.wsPerMonitorIds : 0
+      iconGap: settings ? settings.wsIconGap : 4
+      scratchpadLabel: settings ? settings.wsScratchpadLabel : "S"
     }
   }
 

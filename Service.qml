@@ -7,6 +7,7 @@ import "system"
 import "core/environments.mjs" as EnvironmentsCore
 import "core/appearance.mjs" as AppearanceCore
 import "core/workspaces.mjs" as WorkspacesCore
+import "core/musicWidget.mjs" as MusicWidgetCore
 import "core/i18n.mjs" as I18nCore
 
 // Entrada `service` do plugin (keepLoaded: specs/14-spikes.md, S6). Vive até
@@ -108,6 +109,25 @@ Item {
     settingsStore.values.wsScratchpadLabel = String(label || "").replace(/[\r\n\t]/g, " ").slice(0, 4);
   }
 
+  // Widget de música: modo, exibição e ajustes de tamanho.
+  function setMusicMode(mode) {
+    if (MusicWidgetCore.MUSIC_MODES.indexOf(mode) !== -1) {
+      settingsStore.values.musicMode = mode;
+    }
+  }
+
+  function setMusicFlag(key, on) {
+    const name = String(key);
+    if (MusicWidgetCore.MUSIC_FLAGS.indexOf(name) === -1) {
+      console.warn("Island: blocked music flag:", name);
+      return;
+    }
+    settingsStore.values[name] = !!on;
+  }
+
+  function setMusicMaxWidth(width) {
+    settingsStore.values.musicMaxWidth = MusicWidgetCore.clampNumber(width, 80, 400, 140);
+  }
   StateStore {
     id: persistedState
   }

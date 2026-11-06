@@ -87,6 +87,16 @@ WidgetFrame {
     return String(((value - 1) % per + per) % per + 1);
   }
 
+  function isWorkspaceVisibleOnOther(wsId) {
+    if (!widget.source) return false;
+    const monitors = widget.source.monitors;
+    for (let i = 0; i < monitors.length; i++) {
+      if (String(monitors[i].name) === widget.screenName) continue;
+      if (monitors[i].activeWorkspace && monitors[i].activeWorkspace.id === wsId) return true;
+    }
+    return false;
+  }
+
   // Ids visíveis, em ordem. O estado do Hyprland não é reativo por si só, daí
   // a leitura de `revision` no topo (reavalia a cada evento).
   readonly property var workspaceIds: {
@@ -106,10 +116,19 @@ WidgetFrame {
       if (id <= 0) continue;
       if (String(ws.name || "").indexOf("special:") === 0) continue;
 
+      // Em modo global (`perMonitor: false`) a pílula mostra o workspace em
+      // qualquer monitor; só filtra por monitor quando `perMonitor` está ativo.
       const owner = widget.source.monitorName(ws);
       if (widget.perMonitor && widget.screenName !== "" && owner !== "" && owner !== widget.screenName) continue;
 
-      if (!widget.showEmpty && !widget.source.hasWindows(ws) && id !== active) continue;
+      // Em modo global não escondemos um workspace só porque não tem janela
+      // neste monitor: ele pode estar ativo em outro. Em modo por-monitor,
+      // escondemos os vazios que não são o ativo desta barra.
+      if (!widget.showEmpty && !widget.source.hasWindows(ws) && id !== active) {
+        if (widget.perMonitor) continue;
+        // Global: só esconde se também não for o workspace focado em lugar
+        // nenhum (não há como saber sem monitor, então mantemos visível).
+      }
       if (ids.indexOf(id) === -1) ids.push(id);
     }
 
@@ -145,6 +164,7 @@ WidgetFrame {
       required property var modelData
 
       readonly property bool current: widget.source.activeIdFor(widget.screenName) === pill.modelData
+      readonly property bool onOther: !pill.current && widget.isWorkspaceVisibleOnOther(pill.modelData)
       readonly property var workspace: widget.source.workspaceById(pill.modelData)
       property bool hovered: false
 
@@ -155,7 +175,11 @@ WidgetFrame {
       radius: 9
       color: pill.current
         ? Qt.alpha(Tokens.accent, widget.focused ? 0.90 : 0.55)
-        : pill.hovered ? Tokens.neutral800 : Tokens.neutral900
+        : pill.onOther
+          ? Qt.alpha(Tokens.accent, 0.22)
+          : pill.hovered ? Tokens.neutral800 : Tokens.neutral900
+      border.width: pill.onOther ? 1 : 0
+      border.color: pill.onOther ? Qt.alpha(Tokens.accent, 0.45) : "transparent"
 
       Behavior on color {
         ColorAnimation {
@@ -173,7 +197,7 @@ WidgetFrame {
           Layout.alignment: Qt.AlignVCenter
           px: 11
           text: widget.labelFor(pill.modelData)
-          color: pill.current ? Tokens.bg : Tokens.neutral300
+          color: pill.current ? Tokens.bg : pill.onOther ? Tokens.neutral100 : Tokens.neutral300
         }
 
         RowLayout {

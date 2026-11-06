@@ -83,6 +83,13 @@ Scope {
       property int wsPerMonitorIds: 0
       property int wsIconGap: 4
       property string wsScratchpadLabel: "S"
+      // Widget de música:
+      // musicMode: 'compact' (só título), 'full' (título + artista), 'minimal' (só ícone/onda), 'controls' (com botões de mídia)
+      property string musicMode: "compact"
+      property bool musicShowArt: true
+      property bool musicShowWaves: true
+      property bool musicHideIdle: false
+      property int musicMaxWidth: 140
     }
     // qmllint enable unresolved-type
   }

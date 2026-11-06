@@ -8,10 +8,13 @@ Rectangle {
   property bool clickable: false
   default property alias content: row.data
   property alias spacing: row.spacing
+  // Largura só do conteúdo: quem estende a moldura usa para o próprio
+  // `implicitWidth` sem repetir a soma dos filhos da `Row`.
+  readonly property real contentWidth: row.implicitWidth
 
   signal clicked
 
-  implicitWidth: row.implicitWidth + 18
+  implicitWidth: contentWidth + 18
   implicitHeight: 22
   radius: 11
   color: pointer.containsMouse && clickable ? Tokens.neutral900 : "transparent"
@@ -22,14 +25,6 @@ Rectangle {
     }
   }
 
-  Row {
-    id: row
-
-    anchors.verticalCenter: parent.verticalCenter
-    x: 9
-    spacing: 6
-  }
-
   MouseArea {
     id: pointer
 
@@ -38,5 +33,13 @@ Rectangle {
     enabled: frame.clickable
     cursorShape: frame.clickable ? Qt.PointingHandCursor : Qt.ArrowCursor
     onClicked: frame.clicked()
+  }
+
+  Row {
+    id: row
+
+    anchors.verticalCenter: parent.verticalCenter
+    x: 9
+    spacing: 6
   }
 }

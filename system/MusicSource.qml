@@ -23,6 +23,9 @@ Scope {
   readonly property string artUrl: player ? player.trackArtUrl || "" : ""
   readonly property string sourceGlyph: player ? MusicCore.sourceGlyph(player.identity || "") : MusicCore.MUSIC_NOTE_GLYPH
   readonly property bool playing: player !== null && player.isPlaying
+  readonly property bool canGoPrevious: player ? player.canGoPrevious : false
+  readonly property bool canGoNext: player ? player.canGoNext : false
+  readonly property bool canTogglePlaying: player ? player.canTogglePlaying : false
 
   // Troca de faixa do player atual tocando: gatilho do modo `music`.
   signal trackChanged
