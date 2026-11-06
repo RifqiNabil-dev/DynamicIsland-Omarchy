@@ -101,3 +101,28 @@ export function sourceGlyph(identity) {
     var _a;
     return (_a = SOURCE_GLYPHS[identity.trim().toLowerCase()]) !== null && _a !== void 0 ? _a : MUSIC_NOTE_GLYPH;
 }
+// `mpris:artUrl` é escrito por qualquer app no barramento de sessão, e a
+// `Image` da capa busca o que ele mandar: `file://`/`data:` (player local) e
+// `http(s)` público seguem iguais, mas `http(s)` para a própria máquina ou a
+// rede local é recusado (senão o player escolhe para onde o shell faz request).
+const PRIVATE_IPV4 = /^(?:0|10|127)\.|^169\.254\.|^192\.168\.|^172\.(?:1[6-9]|2\d|3[01])\./;
+const PRIVATE_IPV6 = /^\[(?:::0*1|::|fe80:|fc|fd)/i;
+/** URL de capa que a ilha aceita; fora disso devolve `''` (o bloco com a nota fica). */
+export function safeArtUrl(url) {
+    const raw = String(url || '').trim();
+    if (raw === '' || !/^[a-z][a-z0-9+.-]*:/i.test(raw))
+        return raw;
+    if (!/^https?:\/\//i.test(raw))
+        return raw;
+    const match = /^https?:\/\/([^/?#]*)/i.exec(raw);
+    let host = match ? match[1] : '';
+    const at = host.lastIndexOf('@');
+    if (at >= 0)
+        host = host.slice(at + 1);
+    const name = (host.startsWith('[') ? host.slice(0, host.indexOf(']') + 1) : host.split(':')[0]).toLowerCase();
+    if (name === '' || name === 'localhost' || /\.(?:local|internal|lan|home)$/.test(name))
+        return '';
+    if (name.startsWith('[') ? PRIVATE_IPV6.test(name) : PRIVATE_IPV4.test(name))
+        return '';
+    return raw;
+}

@@ -20,7 +20,9 @@ Scope {
   readonly property real lengthUs: player ? player.length * 1e6 : 0
   readonly property string artist: player ? MusicCore.artistLine(player.trackArtist ? [player.trackArtist] : [], player.identity || "") : ""
   readonly property string title: player ? player.trackTitle || "" : ""
-  readonly property string artUrl: player ? player.trackArtUrl || "" : ""
+  // `mpris:artUrl` vem do player: filtrado em `safeArtUrl` (nada de request
+  // forçado a loopback/rede local por um app qualquer do barramento).
+  readonly property string artUrl: player ? MusicCore.safeArtUrl(player.trackArtUrl || "") : ""
   readonly property string sourceGlyph: player ? MusicCore.sourceGlyph(player.identity || "") : MusicCore.MUSIC_NOTE_GLYPH
   readonly property bool playing: player !== null && player.isPlaying
   readonly property bool canGoPrevious: player ? player.canGoPrevious : false
