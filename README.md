@@ -1,6 +1,6 @@
 # Island
 
-![Island](docs/screenshots/hero.png)
+![Island](docs/screenshots/hero1.png)
 
 A Dynamic Island for the [Omarchy](https://omarchy.org) bar: a compact strip of pills that folds
 open into cards, panels and a small notification stack. Written in QML for Quickshell, driven by
@@ -32,17 +32,18 @@ Omarchy ones it replaces.
 
 | | |
 | --- | --- |
-| Closed bar | ![Closed bar](docs/screenshots/bar-default.png) |
-| Open island | ![Open island](docs/screenshots/center-card.png) |
-| Quick controls | ![Quick controls](docs/screenshots/quick.png) |
+| Closed bar | ![Closed bar](docs/screenshots/bar-default1.png) |
+| Open island | ![Open island](docs/screenshots/center-card1.png) |
+| Quick controls | ![Quick controls](docs/screenshots/quick1.png) |
 | Wi-Fi panel | ![Wi-Fi panel](docs/screenshots/quick-wifi.png) |
-| Mixer | ![Mixer](docs/screenshots/mixer.png) |
+| Mixer | ![Mixer](docs/screenshots/mixer1.png) |
 | AI usage | ![AI usage](docs/screenshots/ai.png) |
-| Appearance page | ![Appearance](docs/screenshots/appearance.png) |
-| Environments editor | ![Editor](docs/screenshots/editor.png) |
+| Appearance page | ![Appearance](docs/screenshots/appearance1.png) |
+| Environments editor | ![Editor](docs/screenshots/editor1.png) |
+| Widget Customization | ![Customization](docs/screenshots/customization1.png) |
+| Battery | ![Battery](docs/screenshots/battery1.png) |
 
-More in [`docs/screenshots/`](docs/screenshots): `bar-plugins.png`, `bar-solid.png`,
-`bluetooth.png`, `battery.png`, `power.png`.
+More in [`docs/screenshots/`](docs/screenshots)
 
 ## Requirements
 
