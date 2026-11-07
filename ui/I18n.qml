@@ -17,4 +17,9 @@ QtObject {
   function count(n, one, other, params) {
     return I18nCore.trCount(language, n, one, other, params || {});
   }
+
+  // Nome curto do dia da semana; `day` como `Date.getDay()` (0 = domingo).
+  function weekday(day) {
+    return I18nCore.weekdayShort(language, day);
+  }
 }

@@ -110,6 +110,7 @@ Item {
         models: sources.ai.current !== null && sources.ai.current.record !== null ? sources.ai.current.record.models.length : 0
       }),
       displayBrightness: sources.brightness.available,
+      nightLight: sources.nightLight.available,
       batteryProfiles: sources.battery.profiles.length > 0,
       mixerHeight: MixerCore.mixerHeight({
         outputs: sources.audio.outputs.length,

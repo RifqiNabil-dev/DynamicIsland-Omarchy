@@ -28,6 +28,14 @@ Scope {
   readonly property bool available: reading !== null && WeatherCore.isFresh(reading, nowMs)
   readonly property string glyph: available ? reading.glyph : ""
   readonly property string temperature: available ? WeatherCore.formatTemperature(reading.celsius) : ""
+  // `Clear`, `Rain`… (rótulo em inglês de `weatherIcon.mjs`; quem mostra traduz).
+  readonly property string condition: available ? reading.condition || "" : ""
+  // Previsão de 4 dias: `[{date, code, glyph, min, max}]`, o primeiro é hoje.
+  readonly property var days: available && Array.isArray(reading.days) ? reading.days : []
+  // Além de `refreshMs` a leitura ainda vale (3h), mas já pode estar errada.
+  readonly property bool stale: reading !== null && nowMs - reading.receivedAt > refreshMs
+  // Próxima virada de sol (nascer/pôr): o ícone dia/noite muda nela.
+  property real solarRefreshAt: 0
 
   readonly property int refreshMs: 30 * 60 * 1000
 
@@ -46,10 +54,27 @@ Scope {
   function accept(body) {
     const current = WeatherCore.parseOpenMeteoCurrent(body);
     if (!current) return;
-    const glyph = WeatherIcon.weatherGlyph(current.code, current.isDay);
-    if (!glyph) return;
-    reading = { glyph: glyph, celsius: current.celsius, receivedAt: Date.now() };
+    // Código fora da tabela do WMO: nuvem, para o clima não sumir da ilha.
+    const days = (WeatherCore.parseOpenMeteoForecast(body) || []).map(day => ({
+      date: day.date,
+      code: day.code,
+      glyph: WeatherIcon.weatherGlyph(day.code, true) || "cloud-fill",
+      min: day.min,
+      max: day.max,
+      // Locais (o `timezone=auto` da consulta): servem à virada dia/noite.
+      sunrise: day.sunrise,
+      sunset: day.sunset
+    }));
+    reading = {
+      glyph: WeatherIcon.weatherGlyph(current.code, current.isDay) || "cloud-fill",
+      celsius: current.celsius,
+      code: current.code,
+      condition: WeatherIcon.weatherLabel(current.code),
+      days: days,
+      receivedAt: Date.now()
+    };
     nowMs = reading.receivedAt;
+    solarRefreshAt = WeatherCore.nextSolarBoundary(days, reading.receivedAt);
   }
 
   FileView {
@@ -143,6 +168,12 @@ Scope {
       const resumed = now - lastTick > 2 * interval;
       lastTick = now;
       weather.nowMs = now;
+      // Virada de sol: a leitura é refeita nela para o ícone dia/noite acertar.
+      if (weather.solarRefreshAt > 0 && now >= weather.solarRefreshAt) {
+        weather.solarRefreshAt = 0;
+        weather.refresh();
+        return;
+      }
       if (resumed || !weather.reading || now - weather.reading.receivedAt >= weather.refreshMs) weather.refresh();
     }
   }

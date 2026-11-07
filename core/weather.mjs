@@ -57,10 +57,108 @@ export function parseWeatherLocation(text) {
         return null;
     return { name: typeof root.name === 'string' ? root.name : '', latitude, longitude };
 }
+/** Previsão de 4 dias junto com o tempo atual: uma requisição só. */
+export const FORECAST_DAYS = 4;
 export function openMeteoUrl(location) {
     return ('https://api.open-meteo.com/v1/forecast' +
         `?latitude=${location.latitude}&longitude=${location.longitude}` +
-        '&current=temperature_2m,weather_code,is_day&temperature_unit=celsius');
+        '&current=temperature_2m,weather_code,is_day' +
+        '&daily=weather_code,temperature_2m_max,temperature_2m_min,sunrise,sunset' +
+        `&forecast_days=${FORECAST_DAYS}&timezone=auto&temperature_unit=celsius`);
+}
+/**
+ * `daily` do Open-Meteo: um item por dia (`date`/`sunrise`/`sunset` em epoch ms
+ * locais, porque a consulta pede `timezone=auto`), no máximo `FORECAST_DAYS`.
+ * Formato inesperado → `null`; dias incompletos são descartados, não derrubam a lista.
+ */
+export function parseOpenMeteoForecast(body) {
+    const root = parseJson(body);
+    if (!isRecord(root) || !isRecord(root.daily))
+        return null;
+    const { time: dates, weather_code: codes, temperature_2m_max: maxes, temperature_2m_min: mins, sunrise: sunrises, sunset: sunsets, } = root.daily;
+    if (!Array.isArray(dates) || !Array.isArray(codes) || !Array.isArray(maxes) || !Array.isArray(mins))
+        return null;
+    const days = [];
+    for (let i = 0; i < dates.length && days.length < FORECAST_DAYS; i += 1) {
+        const date = localTime(dates[i]);
+        const code = codes[i];
+        const max = maxes[i];
+        const min = mins[i];
+        if (date === null || typeof code !== 'number' || typeof max !== 'number' || typeof min !== 'number')
+            continue;
+        days.push({
+            date,
+            code,
+            max,
+            min,
+            sunrise: Array.isArray(sunrises) ? localTime(sunrises[i]) : null,
+            sunset: Array.isArray(sunsets) ? localTime(sunsets[i]) : null,
+        });
+    }
+    return days.length > 0 ? days : null;
+}
+/** Hora local do Open-Meteo (`2026-11-08T05:00`) em epoch ms; inválida → `null`. */
+function localTime(text) {
+    if (typeof text !== 'string')
+        return null;
+    const ms = Date.parse(text);
+    return Number.isFinite(ms) ? ms : null;
+}
+/**
+ * A próxima virada de sol (nascer ou pôr) das leituras: o ícone de dia/noite
+ * muda nela, não na próxima atualização de 30min. `0` sem horários válidos.
+ */
+export function nextSolarBoundary(days, now) {
+    let next = 0;
+    for (const day of days) {
+        for (const boundary of [day.sunrise, day.sunset]) {
+            if (typeof boundary !== 'number' || boundary <= now)
+                continue;
+            if (next === 0 || boundary < next)
+                next = boundary;
+        }
+    }
+    return next;
+}
+/** Teto do texto digitado na busca de cidade. */
+export const MAX_QUERY_NAME = 60;
+/** Cidade digitada → coordenadas, pelo geocoding do Open-Meteo (sem chave). */
+export function geocodingUrl(query, lang = 'en') {
+    const name = String(query || '').trim().slice(0, MAX_QUERY_NAME);
+    return ('https://geocoding-api.open-meteo.com/v1/search' +
+        `?name=${encodeURIComponent(name)}&count=3&language=${encodeURIComponent(lang)}&format=json`);
+}
+/** Até 3 lugares da busca: `{name, region, latitude, longitude}`. */
+export function parseGeocoding(body) {
+    const root = parseJson(body);
+    if (!isRecord(root) || !Array.isArray(root.results))
+        return [];
+    const places = [];
+    for (const item of root.results) {
+        if (!isRecord(item))
+            continue;
+        const latitude = coordinate(item.latitude, 90);
+        const longitude = coordinate(item.longitude, 180);
+        const name = typeof item.name === 'string' ? item.name.trim() : '';
+        if (latitude === null || longitude === null || name === '')
+            continue;
+        const region = [item.admin1, item.country]
+            .filter((part) => typeof part === 'string' && part !== '')
+            .join(', ');
+        places.push({ name: name.slice(0, MAX_AREA_NAME), region: region.slice(0, MAX_AREA_NAME), latitude, longitude });
+        if (places.length === 3)
+            break;
+    }
+    return places;
+}
+/** Cidade escolhida no painel: `{name, latitude, longitude}`, ou `null` se inválida. */
+export function makeLocation(name, latitude, longitude) {
+    const text = typeof name === 'string' ? name.trim().slice(0, MAX_AREA_NAME) : '';
+    const lat = coordinate(latitude, 90);
+    const lon = coordinate(longitude, 180);
+    if (text === '' || lat === null || lon === null)
+        return null;
+    return { name: text, latitude: lat, longitude: lon };
 }
 /** O nome do `weather.json`, que sozinho também serve ao Omarchy; '' sem nome. */
 export function parseWeatherName(text) {

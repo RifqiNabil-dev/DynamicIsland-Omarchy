@@ -57,11 +57,12 @@ Item {
       onClicked: row.bar.openFromBar(row.bar.targetScreen, row.bar.mode === "bt" ? "quick" : "bt")
     }
 
+    // Perfil do clima: glifo da condição agora (o mesmo da ilha compacta) e o
+    // modo `weather` com a previsão e a cidade.
     Tile {
-      visible: row.system.nightLight.available
-      glyph: "moon-fill"
-      on: row.system.nightLight.on
-      onClicked: row.system.nightLight.toggle()
+      glyph: row.system.weather.glyph !== "" ? row.system.weather.glyph : "cloud-sun"
+      opacity: row.system.weather.available && !row.system.weather.stale ? 1 : 0.55
+      onClicked: row.bar.openFromBar(row.bar.targetScreen, "weather")
     }
 
     Tile {

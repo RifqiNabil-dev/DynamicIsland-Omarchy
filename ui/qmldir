@@ -92,6 +92,7 @@ TopbarWidget 1.0 TopbarWidget.qml
 WidgetArea 1.0 WidgetArea.qml
 WidgetFrame 1.0 WidgetFrame.qml
 WidgetSlot 1.0 WidgetSlot.qml
+WeatherView 1.0 WeatherView.qml
 WifiDns 1.0 WifiDns.qml
 WifiHeader 1.0 WifiHeader.qml
 WifiInfoArea 1.0 WifiInfoArea.qml

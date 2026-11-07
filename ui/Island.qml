@@ -238,6 +238,14 @@ Item {
     }
 
     Layer {
+      layerId: "weather"
+
+      WeatherView {
+        bar: root.bar
+      }
+    }
+
+    Layer {
       layerId: "brightness"
 
       LevelRow {

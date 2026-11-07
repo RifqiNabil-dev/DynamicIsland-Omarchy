@@ -9,6 +9,7 @@ import "core/appearance.mjs" as AppearanceCore
 import "core/workspaces.mjs" as WorkspacesCore
 import "core/musicWidget.mjs" as MusicWidgetCore
 import "core/i18n.mjs" as I18nCore
+import "core/weather.mjs" as WeatherCore
 
 // Entrada `service` do plugin (keepLoaded: specs/14-spikes.md, S6). Vive até
 // o shell reiniciar: guarda o estado visível que não pode se perder quando a
@@ -61,6 +62,26 @@ Item {
 
   function setEnvironments(list) {
     settingsStore.values.environments = EnvironmentsCore.toStored(list);
+  }
+
+  /**
+   * Cidade do clima escolhida no painel (spec 07): `{name, latitude, longitude}`
+   * saneado aqui, como nas outras chaves. Sem coordenadas válidas a gravação é
+   * recusada — o painel só oferece lugares que vieram do geocoding.
+   */
+  function setWeatherLocation(name, latitude, longitude) {
+    const location = WeatherCore.makeLocation(name, latitude, longitude);
+    if (!location) {
+      console.warn("Island: refused weather location:", name);
+      return false;
+    }
+    settingsStore.values.weatherLocation = location;
+    return true;
+  }
+
+  /** Volta à cidade do Omarchy (`weather.json`, senão a detecção pela IP). */
+  function clearWeatherLocation() {
+    settingsStore.values.weatherLocation = null;
   }
 
   /** Uma opção da aparência; o arquivo guarda o objeto inteiro já saneado. */

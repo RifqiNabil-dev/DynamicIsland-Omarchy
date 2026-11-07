@@ -12,6 +12,7 @@ Item {
   required property var bar
   readonly property var display: bar.system.display
   readonly property var brightness: bar.system.brightness
+  readonly property var nightLight: bar.system.nightLight
 
   ColumnLayout {
     anchors.fill: parent
@@ -134,6 +135,20 @@ Item {
             onClicked: view.display.setScale(modelData)
           }
         }
+      }
+    }
+
+    Section {
+      visible: view.nightLight.available
+
+      // O tile do modo noturno saiu da linha de controles (lá ficou o clima):
+      // aqui ele fica ao lado do brilho, que é o mesmo assunto.
+      SwitchRow {
+        Layout.fillWidth: true
+        Layout.preferredHeight: 24
+        label: I18n.tr("Night light")
+        on: view.nightLight.on
+        onToggled: view.nightLight.toggle()
       }
     }
 

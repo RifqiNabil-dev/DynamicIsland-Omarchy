@@ -61,10 +61,18 @@ export function getSize(mode, ctx = {}) {
             return { width: 440, height: (_c = ctx.mixerHeight) !== null && _c !== void 0 ? _c : MIXER_MAX_HEIGHT, radius: 24 };
         case 'display':
             // Seção de brilho: rótulo 18 + 6 + slider 20 + divisor 1 + 2×10.
-            return { width: 440, height: ctx.displayBrightness === false ? 212 : 277, radius: 24 };
+            // Seção do modo noturno: divisor 1 + 2×10 + linha 24.
+            return {
+                width: 440,
+                height: (ctx.displayBrightness === false ? 212 : 277) + (ctx.nightLight === false ? 0 : 45),
+                radius: 24,
+            };
         case 'battery':
             // Seção de perfis: divisor 12 + 1 + 10, rótulo 18 + 6, botões 36.
             return { width: 440, height: ctx.batteryProfiles === false ? 142 : 225, radius: 24 };
+        case 'weather':
+            // Cabeçalho 44, previsão 4×26, busca 32, botões 32: 14px de padding.
+            return { width: 440, height: 340, radius: 24 };
         case 'ai':
             return { width: 480, height: (_d = ctx.aiHeight) !== null && _d !== void 0 ? _d : 56, radius: 24 };
     }
