@@ -15,6 +15,7 @@ import "core/environments.mjs" as EnvironmentsCore
 import "core/environmentEditor.mjs" as EditorCore
 import "core/stackScroll.mjs" as StackScrollCore
 import "core/pluginWidgets.mjs" as PluginWidgetsCore
+import "core/weather.mjs" as WeatherCore
 import "core/barZoom.mjs" as BarZoomCore
 
 // Entrada `bar` do plugin (specs/14-spikes.md, S6). O omarchy-shell recria
@@ -137,7 +138,9 @@ Item {
     ai.claudeEnabled: root.service ? root.service.settings.values.aiClaudeEnabled : true
     ai.codexEnabled: root.service ? root.service.settings.values.aiCodexEnabled : true
     github.polling: root.activeWidgets.includes("github")
-    weather.preferredLocation: root.service ? root.service.settings.values.weatherLocation : null
+    // `settings.json` aceita edição fora da UI: o que chega aqui passa pelo
+    // mesmo saneamento do painel (`makeLocation`) antes de virar URL.
+    weather.preferredLocation: root.service ? WeatherCore.sanitizeLocation(root.service.settings.values.weatherLocation) : null
   }
 
   QmlScheduler {

@@ -160,6 +160,16 @@ export function makeLocation(name, latitude, longitude) {
         return null;
     return { name: text, latitude: lat, longitude: lon };
 }
+/**
+ * O mesmo rigor de `makeLocation` para o que volta do `settings.json`: o
+ * arquivo é editável fora da UI, e `openMeteoUrl` monta a URL com esses
+ * números. Objeto estranho → `null` (vale o `weather.json` do Omarchy).
+ */
+export function sanitizeLocation(value) {
+    if (!isRecord(value))
+        return null;
+    return makeLocation(value.name, value.latitude, value.longitude);
+}
 /** O nome do `weather.json`, que sozinho também serve ao Omarchy; '' sem nome. */
 export function parseWeatherName(text) {
     const root = parseJson(text);
