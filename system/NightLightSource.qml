@@ -17,6 +17,16 @@ Scope {
   readonly property bool on: available && service.enabled === true
 
   function toggle() {
-    if (available) service.toggle();
+    if (!available) return;
+    // O proxy de `firstPartyServiceFor` não expõe `toggle()`: o contrato de
+    // `/usr/share/omarchy/shell/services/PluginFirstPartyServiceApi.qml` é
+    // `enabled` (leitura) + `setNightlight(bool)` (escrita). Chamar
+    // `service.toggle()` levanta TypeError e o modo noturno nunca liga.
+    if (typeof service.setNightlight === "function") {
+      service.setNightlight(!on);
+      return;
+    }
+    // Serviço direto (harness `dev/`), que tem `toggle()`.
+    if (typeof service.toggle === "function") service.toggle();
   }
 }
