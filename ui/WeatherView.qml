@@ -60,7 +60,7 @@ Item {
 
     PanelHeader {
       Layout.fillWidth: true
-      glyph: view.weather.glyph !== "" ? view.weather.glyph : "cloud-sun"
+      glyph: view.weather.glyph !== "" ? view.weather.glyph : "cloud-sun-fill"
       glyphColor: view.weather.available ? Tokens.accent : Tokens.neutral500
       title: view.placeName
       subtitle: view.weather.available ? I18n.tr(view.weather.condition) : I18n.tr("No data")
@@ -167,7 +167,9 @@ Item {
                 spacing: 8
 
                 PhIcon {
-                  glyph: "map-pin"
+                  // `map-pin` não existe em `icons/`: o Phosphor escolhido
+                  // para "lugar" é o globo, como no resto do plugin.
+                  glyph: "globe-simple"
                   size: 14
                   color: Tokens.neutral400
                 }
@@ -220,7 +222,7 @@ Item {
           spacing: 8
 
           PhIcon {
-            glyph: "magnifying-glass"
+            glyph: "cursor-click"
             size: 14
             color: Tokens.neutral400
           }

@@ -60,7 +60,7 @@ Item {
     // Perfil do clima: glifo da condição agora (o mesmo da ilha compacta) e o
     // modo `weather` com a previsão e a cidade.
     Tile {
-      glyph: row.system.weather.glyph !== "" ? row.system.weather.glyph : "cloud-sun"
+      glyph: row.system.weather.glyph !== "" ? row.system.weather.glyph : "cloud-sun-fill"
       opacity: row.system.weather.available && !row.system.weather.stale ? 1 : 0.55
       onClicked: row.bar.openFromBar(row.bar.targetScreen, "weather")
     }
