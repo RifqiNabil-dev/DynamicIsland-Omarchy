@@ -23,8 +23,8 @@ Omarchy ones it replaces.
 - **Panels kept from Omarchy** — clicking the bell opens notification history, clicking Wi-Fi opens
   the network panel (QR share, DNS, speed test), volume opens the mixer, battery opens the power
   profile page, and the gear still opens Omarchy's setup menu.
-- **Widgets** — AI usage, hardware, next calendar event, Pomodoro, music, workspaces with real app
-  icons, GitHub review queue, day progress, date countdown and a note.
+- **Widgets** — AI usage, hardware, next calendar event, Pomodoro, music, weather, workspaces with
+  real app icons, GitHub review queue, day progress, date countdown and a note.
 - **Appearance editor** — theme, accent, fill, palette, opacity, shadow, size, style, corners,
   border and effects, all live and all stored in one JSON file.
 
@@ -213,6 +213,7 @@ from `omarchy-weather-location`, and with no coordinates at all it detects the a
 | `bt` | Adapter state, paired devices, scanning; pairing opens `bluetoothctl` in the floating terminal |
 | `mixer` | Outputs, per-application streams, microphone, mute |
 | `display` | Brightness, text size, monitor scale |
+| `weather` | Current condition, the next days' highs and lows, and a city search; the chosen city goes to `weatherLocation` |
 | `stack` | Notification history, with clear and dismiss |
 | power row | Suspend, restart, shut down, log out, lock — Omarchy's `omarchy-system-*` scripts |
 
