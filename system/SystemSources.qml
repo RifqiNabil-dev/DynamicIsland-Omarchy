@@ -33,6 +33,7 @@ Scope {
   readonly property alias hyprOptions: hyprOptions
   readonly property alias workspaces: workspaces
   readonly property alias omarchyTheme: omarchyTheme
+  readonly property alias tray: tray
 
   AudioSource {
     id: audio
@@ -106,5 +107,8 @@ Scope {
   }
   OmarchyThemeColors {
     id: omarchyTheme
+  }
+  TraySource {
+    id: tray
   }
 }
