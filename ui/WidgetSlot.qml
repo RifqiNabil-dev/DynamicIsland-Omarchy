@@ -29,7 +29,7 @@ Item {
   readonly property var service: bar.service
   readonly property real naturalWidth: !loader.item ? 0 : widgetId === "hw" ? (loader.item as HwWidget).fullWidth : (loader.item as Item).implicitWidth
   // Largura só com o ícone, dos widgets de `TopbarWidget` ou `MusicWidget` com ring ou ícone.
-  readonly property real iconWidth: (loader.item as TopbarWidget)?.compactWidth ?? (loader.item as MusicWidget)?.compactWidth ?? 0
+  readonly property real iconWidth: (loader.item as TopbarWidget)?.compactWidth ?? (loader.item as MusicWidget)?.compactWidth ?? (loader.item as TrayWidget)?.compactWidth ?? 0
   // Colapsado: a área deu menos que a natural a um widget que não é o `hw`.
   readonly property bool collapsed: widgetId !== "hw" && iconWidth > 0 && budget > 0 && budget < naturalWidth
   readonly property real minWidth: loader.item && widgetId === "hw" ? Math.min(naturalWidth, (loader.item as HwWidget).minWidth) : naturalWidth
@@ -61,7 +61,8 @@ Item {
         github: githubWidget,
         progress: progressWidget,
         countdown: countdownWidget,
-        note: noteWidget
+        note: noteWidget,
+        tray: trayWidget
       })[slot.widgetId] || (EnvironmentsCore.isPluginWidgetId(slot.widgetId) ? pluginWidget : null)
   }
 
@@ -250,6 +251,17 @@ Item {
       label: text === "" ? I18n.tr("Empty note") : text
       labelMaxWidth: 150
       onClicked: slot.open("note")
+    }
+  }
+
+  Component {
+    id: trayWidget
+
+    TrayWidget {
+      source: slot.system.tray
+      bar: slot.bar
+      screenName: slot.screenName
+      compact: slot.collapsed
     }
   }
 

@@ -10,6 +10,7 @@ export const WIDGET_IDS = [
     'pomodoro',
     'music',
     'workspaces',
+    'tray',
     'github',
     'progress',
     'countdown',
@@ -39,6 +40,11 @@ export const WIDGET_CATALOG = {
         name: msg('Workspaces'),
         icon: 'frame-corners',
         description: msg('Active Hyprland workspaces with app icons'),
+    },
+    tray: {
+        name: msg('Tray'),
+        icon: 'app-window',
+        description: msg('Background apps with their menu'),
     },
     github: { name: msg('GitHub'), icon: 'github-logo', description: msg('PRs awaiting review') },
     progress: {

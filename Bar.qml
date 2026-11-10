@@ -86,6 +86,9 @@ Item {
   property string editorTarget: "left"
   property string editorSelected: ""
 
+  // Bandeja (specs/16): item cujo menu está aberto no modo `tray`.
+  property var trayItem: null
+
   // Conteúdo do modo `osd` (specs/08 "OSD do Omarchy").
   property var osd: ({ glyph: "info", text: "", percent: 0 })
 

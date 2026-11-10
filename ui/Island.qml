@@ -21,9 +21,12 @@ Item {
   readonly property var size: sizeOf(displayMode)
   // Altura do cartão central: a do conteúdo (specs/05 "Cartão central").
   property real cardHeight: 0
+  // Altura do painel da bandeja: a do menu aberto (specs/16 "Bandeja").
+  property real trayHeight: 104
 
   function sizeOf(id) {
     if (id === "card") return { width: 440, height: cardHeight + 2, radius: 26 };
+    if (id === "tray") return { width: 440, height: trayHeight + 2, radius: 26 };
     return IslandCore.getSize(id, bar.sizeContext);
   }
   // Entre `quick`, `wifi` e `bt` a troca de camada é instantânea: os três
@@ -163,6 +166,19 @@ Item {
           bar: root.bar
           onImplicitHeightChanged: root.cardHeight = implicitHeight
           Component.onCompleted: root.cardHeight = implicitHeight
+        }
+      }
+    }
+
+    Layer {
+      layerId: "tray"
+
+      Item {
+        TrayView {
+          width: parent.width
+          bar: root.bar
+          onImplicitHeightChanged: root.trayHeight = implicitHeight
+          Component.onCompleted: root.trayHeight = implicitHeight
         }
       }
     }

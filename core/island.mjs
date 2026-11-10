@@ -57,6 +57,11 @@ export function getSize(mode, ctx = {}) {
             return { width: 260, height: 32, radius: 16 };
         case 'note':
             return { width: 420, height: 132, radius: 24 };
+        case 'tray':
+            // Bandeja: padding 12, cabeçalho 44, gap 6 e a lista do menu. A
+            // altura real vem do conteúdo (Island.qml `trayHeight`); aqui só o
+            // tamanho do estado vazio, para o primeiro quadro.
+            return { width: 440, height: 104, radius: 26 };
         case 'mixer':
             return { width: 440, height: (_c = ctx.mixerHeight) !== null && _c !== void 0 ? _c : MIXER_MAX_HEIGHT, radius: 24 };
         case 'display':
