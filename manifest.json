@@ -2,10 +2,10 @@
   "schemaVersion": 1,
   "id": "alfath.island",
   "name": "Island Desktop",
-  "version": "0.9.0",
+  "version": "0.10.0",
   "author": "Rifqi Nabil",
   "license": "GPL-3.0-or-later",
-  "description": "A Dynamic Island for your Omarchy bar. Three floating pills expand into panels for media, calendar, notifications, volume and per-app audio, Wi-Fi and network stats, battery and power profiles, quick toggles, and Claude/Codex AI usage. Themed from your Omarchy colors, with selectable palettes.",
+  "description": "A Dynamic Island for your Omarchy bar. Three floating pills expand into panels for media, calendar, notifications, volume and per-app audio, Wi-Fi and network stats, battery and power profiles, quick toggles, Claude/Codex AI usage, and NordVPN state with a world map. Themed from your Omarchy colors, with selectable palettes.",
   "kinds": [
     "bar",
     "service"
