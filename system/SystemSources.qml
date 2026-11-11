@@ -34,6 +34,7 @@ Scope {
   readonly property alias workspaces: workspaces
   readonly property alias omarchyTheme: omarchyTheme
   readonly property alias tray: tray
+  readonly property alias vpn: vpn
 
   AudioSource {
     id: audio
@@ -110,5 +111,8 @@ Scope {
   }
   TraySource {
     id: tray
+  }
+  VpnSource {
+    id: vpn
   }
 }

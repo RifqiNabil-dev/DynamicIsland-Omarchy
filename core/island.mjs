@@ -24,7 +24,7 @@ export function isFixedMode(mode) {
 /** Largura do maior modo; a barra mede o espaço das laterais com ela. */
 export const MAX_ISLAND_WIDTH = 660;
 export function getSize(mode, ctx = {}) {
-    var _a, _b, _c, _d;
+    var _a, _b, _c, _d, _e;
     switch (mode) {
         case 'compact':
             return { width: 240, height: 26, radius: 13 };
@@ -78,6 +78,8 @@ export function getSize(mode, ctx = {}) {
         case 'weather':
             // Cabeçalho 44, previsão 4×26, busca 32, botões 32: 14px de padding.
             return { width: 440, height: 340, radius: 24 };
+        case 'vpn':
+            return { width: 440, height: (_e = ctx.vpnHeight) !== null && _e !== void 0 ? _e : 380, radius: 24 };
         case 'ai':
             return { width: 480, height: (_d = ctx.aiHeight) !== null && _d !== void 0 ? _d : 56, radius: 24 };
     }

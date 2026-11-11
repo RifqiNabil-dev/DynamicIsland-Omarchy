@@ -321,6 +321,14 @@ Item {
         bar: root.bar
       }
     }
+
+    Layer {
+      layerId: "vpn"
+
+      VpnView {
+        bar: root.bar
+      }
+    }
   }
 
   // Linha de acento 36×2 no topo central, visível fora de `compact`.

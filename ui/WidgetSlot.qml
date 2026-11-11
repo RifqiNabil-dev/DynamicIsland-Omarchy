@@ -7,6 +7,7 @@ import "../core/dayProgress.mjs" as DayProgress
 import "../core/pomodoro.mjs" as PomodoroCore
 import "../core/environments.mjs" as EnvironmentsCore
 import "../core/github.mjs" as GithubCore
+import "../core/vpn.mjs" as VpnCore
 
 // Um widget do catálogo (specs/16-widgets.md "Widgets"), montado a partir das
 // fontes. `naturalWidth`/`minWidth` alimentam o encaixe da área; só o `hw`
@@ -62,6 +63,7 @@ Item {
         progress: progressWidget,
         countdown: countdownWidget,
         note: noteWidget,
+        vpn: vpnWidget,
         tray: trayWidget
       })[slot.widgetId] || (EnvironmentsCore.isPluginWidgetId(slot.widgetId) ? pluginWidget : null)
   }
@@ -251,6 +253,23 @@ Item {
       label: text === "" ? I18n.tr("Empty note") : text
       labelMaxWidth: 150
       onClicked: slot.open("note")
+    }
+  }
+
+  Component {
+    id: vpnWidget
+
+    TopbarWidget {
+      readonly property var view: VpnCore.vpnWidgetView(slot.system.vpn.state, slot.system.vpn.latency, I18n.language)
+
+      clickable: true
+      glyph: "globe-simple"
+      glyphColor: view.on ? Tokens.accent300 : Tokens.neutral500
+      label: view.label
+      labelColor: view.on ? Tokens.text : Tokens.neutral400
+      labelMaxWidth: 96
+      sub: view.sub || ""
+      onClicked: slot.open("vpn")
     }
   }
 

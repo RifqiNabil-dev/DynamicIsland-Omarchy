@@ -11,6 +11,7 @@ import "core/mixer.mjs" as MixerCore
 import "core/agentUsage.mjs" as AgentCore
 import "core/wifi.mjs" as WifiCore
 import "core/wifiPanel.mjs" as WifiPanelCore
+import "core/vpn.mjs" as VpnCore
 import "core/environments.mjs" as EnvironmentsCore
 import "core/environmentEditor.mjs" as EditorCore
 import "core/stackScroll.mjs" as StackScrollCore
@@ -106,6 +107,7 @@ Item {
         customDns: wifiDnsEditing,
         passwordField: wifiPasswordFor === "" ? "none" : wifiPasswordError === "" ? "normal" : "error"
       }),
+      vpnHeight: VpnCore.vpnPanelHeight(),
       btOn: sources.bluetooth.radioOn,
       calendarView: calendarView,
       aiHeight: AgentCore.aiPanelHeight({
@@ -138,6 +140,8 @@ Item {
     // Fontes só de widget rodam só com o widget no ambiente ativo (spec 16).
     hardware.sampling: root.activeWidgets.includes("hw")
     ai.polling: root.activeWidgets.includes("ai")
+    vpn.polling: root.activeWidgets.includes("vpn") || root.mode === "vpn"
+    vpn.panelOpen: root.mode === "vpn"
     ai.claudeEnabled: root.service ? root.service.settings.values.aiClaudeEnabled : true
     ai.codexEnabled: root.service ? root.service.settings.values.aiCodexEnabled : true
     github.polling: root.activeWidgets.includes("github")

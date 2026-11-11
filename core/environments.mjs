@@ -15,6 +15,7 @@ export const WIDGET_IDS = [
     'progress',
     'countdown',
     'note',
+    'vpn',
 ];
 const PLUGIN_PREFIX = 'plugin:';
 const PLUGIN_ID_PATTERN = /^[A-Za-z0-9][A-Za-z0-9._-]{0,63}$/;
@@ -58,6 +59,11 @@ export const WIDGET_CATALOG = {
         description: msg('Days until the date that matters'),
     },
     note: { name: msg('Note'), icon: 'note', description: msg('A note pinned to the bar') },
+    vpn: {
+        name: msg('NordVPN'),
+        icon: 'globe-simple',
+        description: msg('Connection status and quick connect'),
+    },
 };
 /** Glifos Phosphor de `ENV_ICONS` (`ph ph-house` → `house`, ver `ui/icons.ts`). */
 export const ENV_ICONS = [
@@ -76,7 +82,7 @@ export const MAX_NAME_LENGTH = 20;
 // Os nomes saem no idioma da interface; editado, o ambiente guarda o nome
 // como está.
 const DEFAULT_ENVIRONMENTS = [
-    { name: msg('Default'), icon: 'house', left: ['workspaces', 'ai'], right: ['hw'] },
+    { name: msg('Default'), icon: 'house', left: ['workspaces', 'ai'], right: ['hw', 'vpn'] },
     {
         name: msg('Work'),
         icon: 'briefcase',

@@ -24,7 +24,9 @@ Omarchy ones it replaces.
   the network panel (QR share, DNS, speed test), volume opens the mixer, battery opens the power
   profile page, and the gear still opens Omarchy's setup menu.
 - **Widgets** — AI usage, hardware, next calendar event, Pomodoro, music, weather, workspaces with
-  real app icons, GitHub review queue, day progress, date countdown and a note.
+  real app icons, GitHub review queue, day progress, date countdown, NordVPN and a note.
+- **VPN panel** — the NordVPN CLI's state as a card: download/upload/latency, server, protocol,
+  the full country list with search, and a world map marking the connected server.
 - **Appearance editor** — theme, accent, fill, palette, opacity, shadow, size, style, corners,
   border and effects, all live and all stored in one JSON file.
 
@@ -42,6 +44,7 @@ Omarchy ones it replaces.
 | Environments editor | ![Editor](docs/screenshots/editor1.png) |
 | Widget Customization | ![Customization](docs/screenshots/customization1.png) |
 | Battery | ![Battery](docs/screenshots/battery1.png) |
+| VPN panel | ![VPN](docs/screenshots/vpn.png) |
 
 More in [`docs/screenshots/`](docs/screenshots)
 
@@ -55,7 +58,9 @@ Island is a bar plugin, so it needs an Omarchy install that already runs the Qui
 - Hyprland 0.56
 
 Everything else it touches is already on an Omarchy system: `wpctl`, `brightnessctl`, `nmcli`,
-`bluetoothctl`, `curl`, `secret-tool`, `gh`, and the `omarchy-*` helper scripts.
+`bluetoothctl`, `curl`, `secret-tool`, `gh`, and the `omarchy-*` helper scripts. The VPN widget
+additionally needs the `nordvpn` CLI with the user in the `nordvpn` group (`sudo usermod -aG
+nordvpn $USER`); without it the widget says so and the panel stays inert.
 
 ## Install with Omarchy
 
@@ -122,6 +127,7 @@ omarchy plugin enable alfath.island
 | Display | The monitor tile in the quick panel |
 | Power row | The power button, far right of the quick panel |
 | Settings menu | The gear in the quick panel |
+| VPN panel | Click the NordVPN icon in the right slot (needs the CLI, see Requirements) |
 | Do Not Disturb | Omarchy's own shortcut (`Super+,`) and scripts |
 
 `clickAction` decides what a click on the center card does: `card` opens the island, `calendar`
@@ -175,6 +181,7 @@ slot just draws nothing until it is.
 | Day progress | How much of the day has passed | Local clock |
 | Date countdown | Days until `countdownDate` | `countdownName` / `countdownDate` |
 | Note | A pinned line of text, editable in place | `noteText` |
+| NordVPN | Connection state, download/upload, latency, server, protocol, transfer total, the complete country list and a world map with the server marked | `nordvpn status` and `nordvpn countries` — no credentials are read or stored, and the country list is only fetched when the panel opens |
 
 The weather next to the clock is Omarchy's own widget; Island's compact card shows the same city.
 Without a city in `weatherLocation` it falls back to `~/.local/state/omarchy/settings/weather.json`
