@@ -82,9 +82,8 @@ QtObject {
     const allowed = {
       "omarchy menu summon setup": ["omarchy", "menu", "summon", "setup"],
       "omarchy-system-lock": ["omarchy-system-lock"],
-      "omarchy-system-logout": ["omarchy-system-logout"],
-      "omarchy-system-reboot": ["omarchy-system-reboot"],
-      "omarchy-system-shutdown": ["omarchy-system-shutdown"],
+      "omarchy-system-reboot": ["omarchy-system", "reboot"],
+      "omarchy-system-shutdown": ["omarchy-system", "shutdown"],
       "systemctl suspend": ["systemctl", "suspend"]
     };
     const argv = allowed[key];

@@ -13,11 +13,13 @@ Scope {
 
   property bool canSuspend: false
 
+  // Desde o Omarchy 4.5 reiniciar/desligar/sair são subcomandos de
+  // `omarchy-system`; os antigos `omarchy-system-reboot|shutdown|logout` não
+  // existem mais e falhavam em silêncio. `logout` não é usado pela ilha.
   readonly property var commands: ({
       suspend: ["systemctl", "suspend"],
-      reboot: ["omarchy-system-reboot"],
-      shutdown: ["omarchy-system-shutdown"],
-      logout: ["omarchy-system-logout"],
+      reboot: ["omarchy-system", "reboot"],
+      shutdown: ["omarchy-system", "shutdown"],
       lock: ["omarchy-system-lock"]
     })
 
