@@ -4,11 +4,9 @@ import QtQuick
 import QtQuick.Layouts
 import "../core/osd.mjs" as OsdCore
 
-// Painel `quick` no formato control center (referência do usuário): duas
-// fileiras de pílulas grandes — rádios e modos — e o cartão "Controls" com os
+// Painel `quick` no formato control center (referência do usuário): o
+// cabeçalho `QuickHeader` — rádios e modos — sobre o cartão "Controls", com os
 // sliders verticais de volume, microfone e brilho ao lado da grade de ações.
-// Substitui a `ControlsRow` de 46px só em `quick`; `wifi`/`bt` continuam com
-// a fileira antiga.
 Item {
   id: panel
 
@@ -16,7 +14,7 @@ Item {
   readonly property var system: bar.system
   readonly property var audio: system.audio
 
-  // 414 = 14 (respiro) + 72 + 10 + 72 + 10 + 222 (cartão) + 14.
+  // 414 = 14 (respiro) + 154 (cabeçalho) + 10 + 222 (cartão) + 14.
   implicitWidth: 660
   implicitHeight: 414
 
@@ -28,131 +26,6 @@ Item {
     const blocks = system.hardware.blocks || [];
     for (const block of blocks) if (block && block.id === id) return String(block.value);
     return fallback;
-  }
-
-  // Pílula grande (72px): círculo do ícone, título, estado e chevron. Ligada,
-  // o círculo fica branco e o ícone escuro — o realce do design de referência.
-  component PanelPill: Rectangle {
-    id: pill
-
-    required property string glyph
-    property string title: ""
-    property string subtitle: ""
-    property bool on: false
-    property bool chevron: false
-    property bool interactive: true
-
-    signal clicked
-
-    readonly property bool hovered: pointer.containsMouse
-
-    implicitHeight: 72
-    radius: 20
-    color: pill.hovered && pill.interactive ? Tokens.neutral700 : Tokens.tileOff
-
-    Behavior on color {
-      ColorAnimation {
-        duration: 160
-      }
-    }
-
-    RowLayout {
-      anchors.fill: parent
-      anchors.leftMargin: 14
-      anchors.rightMargin: 14
-      spacing: 12
-
-      Rectangle {
-        implicitWidth: 44
-        implicitHeight: 44
-        radius: 22
-        color: pill.on ? Tokens.neutral100 : Qt.alpha(Tokens.text, 0.09)
-
-        PhIcon {
-          anchors.centerIn: parent
-          glyph: pill.glyph
-          size: 20
-          color: pill.on ? Tokens.neutral900 : Tokens.neutral100
-        }
-      }
-
-      ColumnLayout {
-        Layout.fillWidth: true
-        spacing: 1
-
-        IslandText {
-          Layout.fillWidth: true
-          text: pill.title
-          px: 15
-          elide: Text.ElideRight
-        }
-
-        IslandText {
-          Layout.fillWidth: true
-          visible: pill.subtitle !== ""
-          text: pill.subtitle
-          px: 12
-          color: Tokens.neutral400
-          font.weight: Tokens.weightBody
-          elide: Text.ElideRight
-        }
-      }
-
-      PhIcon {
-        visible: pill.chevron
-        glyph: "caret-right"
-        size: 14
-        color: Tokens.neutral400
-      }
-    }
-
-    MouseArea {
-      id: pointer
-
-      anchors.fill: parent
-      enabled: pill.interactive
-      hoverEnabled: true
-      cursorShape: Qt.PointingHandCursor
-      onClicked: pill.clicked()
-    }
-  }
-
-  // Botão redondo de 72px ao lado das pílulas (Configurações e Energia).
-  component RoundAction: Rectangle {
-    id: action
-
-    required property string glyph
-
-    signal clicked
-
-    readonly property bool hovered: pointer.containsMouse
-
-    implicitWidth: 72
-    implicitHeight: 72
-    radius: 36
-    color: action.hovered ? Tokens.neutral700 : Tokens.tileOff
-
-    Behavior on color {
-      ColorAnimation {
-        duration: 160
-      }
-    }
-
-    PhIcon {
-      anchors.centerIn: parent
-      glyph: action.glyph
-      size: 22
-      color: Tokens.neutral200
-    }
-
-    MouseArea {
-      id: pointer
-
-      anchors.fill: parent
-      hoverEnabled: true
-      cursorShape: Qt.PointingHandCursor
-      onClicked: action.clicked()
-    }
   }
 
   // Pílula pequena (40px) da grade: ícone, rótulo e chevron opcional. Ativa,
@@ -228,76 +101,9 @@ Item {
     anchors.margins: panel.pad
     spacing: panel.gap
 
-    // Fileira 1: rádios conectados e Configurações.
-    RowLayout {
+    QuickHeader {
       Layout.fillWidth: true
-      spacing: panel.gap
-
-      PanelPill {
-        Layout.fillWidth: true
-        visible: panel.system.wifi.available
-        glyph: panel.system.wifi.radioOn ? "wifi-high-bold" : "wifi-slash-bold"
-        title: I18n.tr("Wi-Fi")
-        subtitle: {
-          const active = panel.system.wifi.active;
-          if (!panel.system.wifi.radioOn) return I18n.tr("Off");
-          return active !== null && active.ssid ? String(active.ssid) : I18n.tr("Not connected");
-        }
-        on: panel.system.wifi.radioOn
-        chevron: true
-        onClicked: panel.bar.openFromBar(panel.bar.targetScreen, panel.bar.mode === "wifi" ? "quick" : "wifi")
-      }
-
-      PanelPill {
-        Layout.fillWidth: true
-        visible: panel.system.bluetooth.available
-        glyph: "bluetooth-bold"
-        title: I18n.tr("Bluetooth")
-        subtitle: panel.system.bluetooth.radioOn ? I18n.tr("On") : I18n.tr("Off")
-        on: panel.system.bluetooth.radioOn
-        chevron: true
-        onClicked: panel.bar.openFromBar(panel.bar.targetScreen, panel.bar.mode === "bt" ? "quick" : "bt")
-      }
-
-      RoundAction {
-        glyph: "gear-six"
-        // Fecha antes de abrir: com o foco exclusivo da ilha, o menu não o pegaria.
-        onClicked: {
-          panel.bar.closeAll();
-          panel.system.session.openSettings();
-        }
-      }
-    }
-
-    // Fileira 2: modos e Energia.
-    RowLayout {
-      Layout.fillWidth: true
-      spacing: panel.gap
-
-      PanelPill {
-        Layout.fillWidth: true
-        visible: panel.bar.service !== null
-        glyph: panel.bar.service !== null && panel.bar.service.doNotDisturb ? "bell-slash-fill" : "bell-fill"
-        title: I18n.tr("Focus")
-        subtitle: panel.bar.service !== null && panel.bar.service.doNotDisturb ? I18n.tr("On") : I18n.tr("Off")
-        on: panel.bar.service !== null && panel.bar.service.doNotDisturb
-        onClicked: if (panel.bar.service) panel.bar.service.setDoNotDisturb(!panel.bar.service.doNotDisturb)
-      }
-
-      PanelPill {
-        Layout.fillWidth: true
-        visible: panel.system.nightLight.available
-        glyph: "moon-stars"
-        title: I18n.tr("Night light")
-        subtitle: panel.system.nightLight.on ? I18n.tr("On") : I18n.tr("Off")
-        on: panel.system.nightLight.on
-        onClicked: panel.system.nightLight.toggle()
-      }
-
-      RoundAction {
-        glyph: "power-bold"
-        onClicked: panel.bar.islandState.togglePower()
-      }
+      bar: panel.bar
     }
 
     // Cartão "Controls": sliders verticais à esquerda, grade de ações à direita.
@@ -373,7 +179,9 @@ Item {
                   Layout.fillWidth: true
                   Layout.preferredWidth: 150
                   glyph: "speaker-high-fill"
-                  label: panel.audio.sinkLabel !== "" ? panel.audio.sinkLabel : I18n.tr("Output")
+                  // Prefixo distingue saída de entrada: os dois dispositivos
+                  // costumam ter o mesmo `description` do PipeWire.
+                  label: panel.audio.sinkLabel !== "" ? I18n.tr("Output") + " · " + panel.audio.sinkLabel : I18n.tr("Output")
                   chevron: true
                   onClicked: panel.bar.openFromBar(panel.bar.targetScreen, "mixer")
                 }
@@ -382,7 +190,7 @@ Item {
                   Layout.fillWidth: true
                   Layout.preferredWidth: 150
                   glyph: "microphone-fill"
-                  label: panel.audio.sourceLabel !== "" ? panel.audio.sourceLabel : I18n.tr("Input")
+                  label: panel.audio.sourceLabel !== "" ? I18n.tr("Input") + " · " + panel.audio.sourceLabel : I18n.tr("Input")
                   chevron: true
                   onClicked: panel.bar.openFromBar(panel.bar.targetScreen, "mixer")
                 }

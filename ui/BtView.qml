@@ -19,8 +19,10 @@ ColumnLayout {
   Component.onCompleted: bluetooth.searching = true
   Component.onDestruction: bluetooth.searching = false
 
-  ControlsRow {
+  QuickHeader {
     Layout.fillWidth: true
+    Layout.leftMargin: 14
+    Layout.rightMargin: 14
     bar: view.bar
   }
 

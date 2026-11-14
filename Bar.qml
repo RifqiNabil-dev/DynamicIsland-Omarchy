@@ -392,6 +392,11 @@ Item {
     function onQuickToggleRequested() {
       root.toggleQuick();
     }
+    function onModeRequested(mode, screen) {
+      if (screen && screen !== "") return root.openFromBar(screen, mode);
+      root.targetFocusedScreen();
+      root.islandState.openFromTrigger(mode);
+    }
     function onEnvironmentStepRequested(direction) {
       root.stepEnvironment(direction);
     }

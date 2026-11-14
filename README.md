@@ -145,6 +145,7 @@ omarchy-shell notifications showHistory    # also: dndState, toggleDnd, setDnd, 
 omarchy-shell osd show '<json>'            # also: close, state, ping
 omarchy-shell island toggleQuick           # also: openStack, closeStack,
                                            #       nextEnvironment, previousEnvironment, ping
+omarchy-shell island openMode wifi eDP-1   # abre um modo no monitor indicado
 ```
 
 ## Environments and widgets

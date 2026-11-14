@@ -43,6 +43,8 @@ Item {
   signal osdRequested(string payload)
   signal osdCloseRequested
   signal quickToggleRequested
+  /// Abre um modo direto, para scripts e QA (`omarchy-shell island openMode wifi`).
+  signal modeRequested(string mode, string screen)
   signal stackRequested
   signal stackCloseRequested
   signal environmentStepRequested(int direction)
@@ -248,6 +250,10 @@ Item {
 
     function toggleQuick(): string {
       root.quickToggleRequested();
+      return "ok";
+    }
+    function openMode(mode: string, screen: string): string {
+      root.modeRequested(mode, screen);
       return "ok";
     }
     // Gestos de três dedos (spec 04): para baixo só abre `stack`, para cima só

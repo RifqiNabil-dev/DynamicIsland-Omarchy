@@ -50,7 +50,7 @@ export function getSize(mode, ctx = {}) {
         case 'wifi':
             return { width: 660, height: (_b = ctx.wifiHeight) !== null && _b !== void 0 ? _b : 280, radius: 24 };
         case 'bt': {
-            let height = ctx.btOn === false ? 288 : 336;
+            let height = ctx.btOn === false ? 396 : 444;
             if (ctx.btEnergyOpen)
                 height += 48;
             return { width: 660, height, radius: 24 };
