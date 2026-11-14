@@ -155,12 +155,12 @@ export function parseQr(raw) {
 }
 const LIST_MAX = 196;
 /**
- * `renderVals()` do design v5: controles 154 (+48 energia) · divisor 9 ·
+ * `renderVals()` do design v5: controles 146 (+48 energia) · divisor 9 ·
  * cabeçalho 56 · ligado: vista 88, divisor 11, DNS 58 (+38 personalizado),
  * divisor 11, lista até 196 (+ senha), 10; desligado: 160.
  */
 export function wifiPanelHeight(parts) {
-    const top = 154 + (parts.energyOpen ? 48 : 0) + 9 + 56;
+    const top = 146 + (parts.energyOpen ? 48 : 0) + 9 + 56;
     if (parts.radioOn === false)
         return top + 160;
     const password = parts.passwordField === 'error' ? 76 : parts.passwordField === 'normal' ? 58 : 0;

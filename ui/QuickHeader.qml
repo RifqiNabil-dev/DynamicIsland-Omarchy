@@ -16,8 +16,8 @@ Item {
 
   readonly property int gap: 10
 
-  // 72 + 10 + 72: as duas fileiras.
-  implicitHeight: 154
+  // 68 + 10 + 68: as duas fileiras.
+  implicitHeight: 146
 
   // Pílula grande: círculo de ícone, título, estado e chevron. Ligada, o
   // círculo fica branco com a tinta escura.
@@ -35,8 +35,8 @@ Item {
 
     readonly property bool hovered: pointer.containsMouse
 
-    implicitHeight: 72
-    radius: 20
+    implicitHeight: 68
+    radius: 19
     color: pill.hovered && pill.interactive ? Tokens.neutral700 : Tokens.tileOff
 
     Behavior on color {
@@ -52,9 +52,9 @@ Item {
       spacing: 12
 
       Rectangle {
-        implicitWidth: 44
-        implicitHeight: 44
-        radius: 22
+        implicitWidth: 40
+        implicitHeight: 40
+        radius: 20
         color: pill.on ? Tokens.neutral100 : Qt.alpha(Tokens.text, 0.09)
 
         PhIcon {
@@ -106,7 +106,7 @@ Item {
     }
   }
 
-  // Botão redondo de 72px que fecha cada fileira.
+  // Botão redondo de 68px que fecha cada fileira.
   component RoundAction: Rectangle {
     id: action
 
@@ -116,9 +116,9 @@ Item {
 
     readonly property bool hovered: pointer.containsMouse
 
-    implicitWidth: 72
-    implicitHeight: 72
-    radius: 36
+    implicitWidth: 68
+    implicitHeight: 68
+    radius: 34
     color: action.hovered ? Tokens.neutral700 : Tokens.tileOff
 
     Behavior on color {

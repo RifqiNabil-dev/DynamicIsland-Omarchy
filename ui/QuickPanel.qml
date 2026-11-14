@@ -14,9 +14,9 @@ Item {
   readonly property var system: bar.system
   readonly property var audio: system.audio
 
-  // 414 = 14 (respiro) + 154 (cabeçalho) + 10 + 222 (cartão) + 14.
+  // 406 = 14 (respiro) + 146 (cabeçalho) + 10 + 222 (cartão) + 14.
   implicitWidth: 660
-  implicitHeight: 414
+  implicitHeight: 406
 
   readonly property int pad: 14
   readonly property int gap: 10
