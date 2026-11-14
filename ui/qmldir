@@ -64,6 +64,7 @@ PluginWidgetBar 1.0 PluginWidgetBar.qml
 PluginWidgetHost 1.0 PluginWidgetHost.qml
 PowerRow 1.0 PowerRow.qml
 ProgressRing 1.0 ProgressRing.qml
+QuickPanel 1.0 QuickPanel.qml
 RadioHeader 1.0 RadioHeader.qml
 RadioOffArea 1.0 RadioOffArea.qml
 RightButtons 1.0 RightButtons.qml
@@ -93,6 +94,7 @@ TrayView 1.0 TrayView.qml
 TrayWidget 1.0 TrayWidget.qml
 VpnView 1.0 VpnView.qml
 VpnMap 1.0 VpnMap.qml
+VSlider 1.0 VSlider.qml
 WidgetArea 1.0 WidgetArea.qml
 WidgetFrame 1.0 WidgetFrame.qml
 WidgetSlot 1.0 WidgetSlot.qml

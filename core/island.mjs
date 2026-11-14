@@ -44,7 +44,9 @@ export function getSize(mode, ctx = {}) {
         case 'calendar':
             return { width: 480, height: ctx.calendarView === 'month' ? 214 : 150, radius: 24 };
         case 'quick':
-            return { width: 660, height: ctx.quickEnergyOpen ? 94 : 46, radius: 23 };
+            // Control center: 14 + 72 + 10 + 72 + 10 + 222 + 14, mais a linha
+            // de energia (48) quando aberta.
+            return { width: 660, height: ctx.quickEnergyOpen ? 462 : 414, radius: 16 };
         case 'wifi':
             return { width: 660, height: (_b = ctx.wifiHeight) !== null && _b !== void 0 ? _b : 280, radius: 24 };
         case 'bt': {

@@ -138,7 +138,7 @@ Item {
     wifiDetails.watching: root.mode === "wifi" && sources.wifi.radioOn
     display.screenName: root.targetScreen
     // Fontes só de widget rodam só com o widget no ambiente ativo (spec 16).
-    hardware.sampling: root.activeWidgets.includes("hw")
+    hardware.sampling: root.activeWidgets.includes("hw") || root.mode === "quick"
     ai.polling: root.activeWidgets.includes("ai")
     vpn.polling: root.activeWidgets.includes("vpn") || root.mode === "vpn"
     vpn.panelOpen: root.mode === "vpn"

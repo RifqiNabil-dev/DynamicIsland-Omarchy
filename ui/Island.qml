@@ -290,7 +290,7 @@ Item {
       ColumnLayout {
         spacing: 0
 
-        ControlsRow {
+        QuickPanel {
           Layout.fillWidth: true
           bar: root.bar
         }

@@ -35,6 +35,22 @@ Scope {
   readonly property int percent: available ? Math.round(Math.min(1, sink.audio.volume) * 100) : 0
   readonly property bool muted: available && sink.audio.muted
   readonly property bool micAvailable: source !== null && source.audio !== null
+  readonly property int micPercent: micAvailable ? Math.round(Math.min(1, source.audio.volume) * 100) : 0
+  readonly property bool micMuted: micAvailable && source.audio.muted
+  // Rótulos do painel `quick` (control center): descrição do nó no Pipewire,
+  // com o nome técnico como reserva quando o servidor não manda descrição.
+  readonly property string sinkLabel: nodeLabel(sink)
+  readonly property string sourceLabel: nodeLabel(source)
+
+  function nodeLabel(node) {
+    if (!node || node.audio === null) return "";
+    return String(node.description || node.nickname || node.name || "");
+  }
+
+  /** Slider do microfone: mesmo caminho do slider de volume. */
+  function setMicPercent(value) {
+    if (micAvailable) setNodePercent(source, value);
+  }
 
   readonly property var candidateSinks: nodes.filter(node => node && node.isSink && !node.isStream)
   // Stream de reprodução: `isSink` sem ler `properties` (inválido até o nó

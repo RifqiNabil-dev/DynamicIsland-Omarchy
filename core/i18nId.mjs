@@ -318,4 +318,12 @@ export const ID = {
     'Kill switch': 'Kill switch',
     'Auto-connect': 'Sambung otomatis',
     Disconnect: 'Putuskan',
+    // Painel `quick` no formato control center.
+    On: 'Nyala',
+    'Wi-Fi': 'Wi-Fi',
+    Bluetooth: 'Bluetooth',
+    Awake: 'Terjaga',
+    Record: 'Rekam',
+    Dictation: 'Dikte',
+    'Not connected': 'Tidak tersambung',
 };
