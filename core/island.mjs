@@ -14,12 +14,26 @@ const TRANSIENT_MS = {
 const BROWSER_NOTIF_MS = 2100;
 /** Modos com a linha de controles, onde fica o botão Energia (specs/09-sessao-energia.md). */
 const POWER_MODES = new Set(['quick', 'wifi', 'bt']);
+/** Modos que a barra sabe desenhar; `getSize` cobre todos (specs/03-ilha.md). */
+const KNOWN_MODES = new Set([
+    'compact', 'notif', 'stack', 'music', 'volume', 'brightness', 'osd',
+    'calendar', 'quick', 'wifi', 'bt', 'env', 'note', 'tray', 'mixer',
+    'display', 'battery', 'weather', 'vpn', 'ai',
+]);
+/** Modo que a barra conhece; fora disso o IPC `island.openMode` recusa. */
+export function isKnownMode(mode) {
+    return KNOWN_MODES.has(String(mode));
+}
 function isTransient(mode) {
-    return mode in TRANSIENT_MS;
+    // `in` sobe a cadeia de protótipos: `constructor` e `toString` viravam transientes.
+    // `Object.hasOwn` com um valor vindo do QML lança "Type error" no motor do Qt.
+    return Object.prototype.hasOwnProperty.call(TRANSIENT_MS, String(mode));
 }
 /** Modos fixos (`stack`, `calendar`, `quick`, `wifi`, `bt`, `ai`, `note`, `mixer`, `display`, `battery`) tomam o foco de teclado (specs/03-ilha.md). */
 export function isFixedMode(mode) {
-    return mode !== 'compact' && !isTransient(mode);
+    // Modo desconhecido não é fixo: senão a ilha ficava presa e os eventos
+    // automáticos (OSD de volume, notificação) passavam a ser recusados.
+    return KNOWN_MODES.has(String(mode)) && mode !== 'compact' && !isTransient(mode);
 }
 /** Largura do maior modo; a barra mede o espaço das laterais com ela. */
 export const MAX_ISLAND_WIDTH = 660;
@@ -85,6 +99,9 @@ export function getSize(mode, ctx = {}) {
         case 'ai':
             return { width: 480, height: (_d = ctx.aiHeight) !== null && _d !== void 0 ? _d : 56, radius: 24 };
     }
+    // Modo desconhecido (IPC com string arbitrária): compacto em vez de
+    // `undefined`, que quebrava as leituras de `width`/`height` da barra.
+    return { width: 240, height: 26, radius: 13 };
 }
 /**
  * Raio desenhado: o design v5 arredonda mais a ilha (`islandR: min(r + 10, h / 2)`),
