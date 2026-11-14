@@ -21,8 +21,9 @@ Scope {
   readonly property string artist: player ? MusicCore.artistLine(player.trackArtist ? [player.trackArtist] : [], player.identity || "") : ""
   readonly property string title: player ? player.trackTitle || "" : ""
   // `mpris:artUrl` vem do player: filtrado em `safeArtUrl` (nada de request
-  // forçado a loopback/rede local por um app qualquer do barramento).
-  readonly property string artUrl: player ? MusicCore.safeArtUrl(player.trackArtUrl || "") : ""
+  // forçado a loopback/rede local por um app qualquer do barramento). `file:`
+  // só é aceito dentro da pasta do usuário (o decoder de imagem roda no shell).
+  readonly property string artUrl: player ? MusicCore.safeArtUrl(player.trackArtUrl || "", Quickshell.env("HOME")) : ""
   readonly property string sourceGlyph: player ? MusicCore.sourceGlyph(player.identity || "") : MusicCore.MUSIC_NOTE_GLYPH
   readonly property bool playing: player !== null && player.isPlaying
   readonly property bool canGoPrevious: player ? player.canGoPrevious : false

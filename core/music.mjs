@@ -105,13 +105,81 @@ export function sourceGlyph(identity) {
 // `Image` da capa busca o que ele mandar: `file://`/`data:` (player local) e
 // `http(s)` público seguem iguais, mas `http(s)` para a própria máquina ou a
 // rede local é recusado (senão o player escolhe para onde o shell faz request).
-const PRIVATE_IPV4 = /^(?:0|10|127)\.|^169\.254\.|^192\.168\.|^172\.(?:1[6-9]|2\d|3[01])\./;
-const PRIVATE_IPV6 = /^\[(?:::0*1|::|fe80:|fc|fd)/i;
+// O host é normalizado antes da comparação: `http://2130706433`,
+// `http://0x7f000001` e `[0:0:0:0:0:ffff:7f00:1]` são o mesmo 127.0.0.1 e
+// passavam pela denylist textual antiga.
+function ipv4Bytes(text) {
+    if (/^\d+$/.test(text)) {
+        const value = Number(text);
+        if (!Number.isSafeInteger(value) || value > 0xffffffff)
+            return null;
+        return [(value >>> 24) & 255, (value >>> 16) & 255, (value >>> 8) & 255, value & 255];
+    }
+    if (/^0x[0-9a-f]+$/i.test(text)) {
+        const value = parseInt(text, 16);
+        if (!Number.isInteger(value) || value < 0 || value > 0xffffffff)
+            return null;
+        return [(value >>> 24) & 255, (value >>> 16) & 255, (value >>> 8) & 255, value & 255];
+    }
+    if (/^(?:0\d+|\d+)(?:\.(?:0\d+|\d+)){3}$/.test(text)) {
+        const parts = text.split('.').map((part) => parseInt(part, /^0\d/.test(part) ? 8 : 10));
+        return parts.every((n) => Number.isInteger(n) && n >= 0 && n <= 255) ? parts : null;
+    }
+    return null;
+}
+function isPrivateV4(bytes) {
+    const [a, b] = bytes;
+    return a === 0 || a === 10 || a === 127 ||
+        (a === 169 && b === 254) ||
+        (a === 192 && b === 168) ||
+        (a === 172 && b >= 16 && b <= 31);
+}
+function isPrivateV6(literal) {
+    const body = literal.replace(/^\[|\]$/g, '').toLowerCase();
+    // IPv4 mapeado (`::ffff:127.0.0.1`, `::ffff:7f00:1`, `::127.0.0.1`).
+    const mapped = /(?:^|:)(?:ffff:)?(?:(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3}))$/.exec(body);
+    if (mapped)
+        return isPrivateV4(mapped.slice(1).map(Number));
+    const hex = /(?:^|:)ffff:([0-9a-f]{1,4}):([0-9a-f]{1,4})$/.exec(body);
+    if (hex)
+        return isPrivateV4([parseInt(hex[1], 16) >> 8, parseInt(hex[1], 16) & 255, parseInt(hex[2], 16) >> 8, parseInt(hex[2], 16) & 255]);
+    return body === '::1' || body === '::' || /^(?:fe80|fec0|fc|fd)/.test(body);
+}
+/** `file:` só dentro da pasta do usuário: nada de /tmp ou de outra conta. */
+function isHomeFileUrl(raw, home) {
+    if (home === '')
+        return false;
+    const path = raw.replace(/^file:\/\//i, '').replace(/^localhost\//i, '/');
+    if (!path.startsWith('/'))
+        return false;
+    const prefix = home.endsWith('/') ? home : home + '/';
+    const decoded = (() => {
+        try {
+            return decodeURIComponent(path);
+        }
+        catch (_a) {
+            return '';
+        }
+    })();
+    if (decoded === '')
+        return false;
+    // `..` resolvido pelo sistema de arquivos: compara o caminho já normalizado.
+    const parts = [];
+    for (const part of decoded.split('/')) {
+        if (part === '..')
+            parts.pop();
+        else if (part !== '' && part !== '.')
+            parts.push(part);
+    }
+    return ('/' + parts.join('/')).startsWith(prefix);
+}
 /** URL de capa que a ilha aceita; fora disso devolve `''` (o bloco com a nota fica). */
-export function safeArtUrl(url) {
+export function safeArtUrl(url, home = '') {
     const raw = String(url || '').trim();
     if (raw === '' || !/^[a-z][a-z0-9+.-]*:/i.test(raw))
         return raw;
+    if (/^file:/i.test(raw))
+        return isHomeFileUrl(raw, String(home || '')) ? raw : '';
     if (!/^https?:\/\//i.test(raw))
         return raw;
     const match = /^https?:\/\/([^/?#]*)/i.exec(raw);
@@ -122,7 +190,14 @@ export function safeArtUrl(url) {
     const name = (host.startsWith('[') ? host.slice(0, host.indexOf(']') + 1) : host.split(':')[0]).toLowerCase();
     if (name === '' || name === 'localhost' || /\.(?:local|internal|lan|home)$/.test(name))
         return '';
-    if (name.startsWith('[') ? PRIVATE_IPV6.test(name) : PRIVATE_IPV4.test(name))
-        return '';
+    if (name.startsWith('[')) {
+        if (isPrivateV6(name))
+            return '';
+    }
+    else {
+        const bytes = ipv4Bytes(name);
+        if (bytes && isPrivateV4(bytes))
+            return '';
+    }
     return raw;
 }

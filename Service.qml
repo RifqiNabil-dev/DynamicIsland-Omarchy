@@ -5,6 +5,7 @@ import Quickshell
 import Quickshell.Io
 import "system"
 import "core/environments.mjs" as EnvironmentsCore
+import "core/island.mjs" as IslandCore
 import "core/appearance.mjs" as AppearanceCore
 import "core/workspaces.mjs" as WorkspacesCore
 import "core/musicWidget.mjs" as MusicWidgetCore
@@ -253,6 +254,12 @@ Item {
       return "ok";
     }
     function openMode(mode: string, screen: string): string {
+      // `osd`/IPC vem de qualquer processo da sessão: modo fora da lista deixa
+      // a ilha num estado que a barra não sabe desenhar (e recusando OSD).
+      if (!IslandCore.isKnownMode(mode)) {
+        console.warn("Island: blocked openMode with unknown mode:", mode);
+        return "invalid";
+      }
       root.modeRequested(mode, screen);
       return "ok";
     }
