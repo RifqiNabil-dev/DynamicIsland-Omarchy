@@ -3,21 +3,30 @@ pragma ComponentBehavior: Bound
 import QtQuick
 import QtQuick.Layouts
 
-// Cabeçalho de control center (design de referência do usuário): fileira de
-// rádios (Wi-Fi · Bluetooth · Configurações) e fileira de modos (Foco · Luz
-// noturna · Energia), com pílulas de 72px. Vive no `quick` e também no topo de
-// `wifi`/`bt`, que antes mostravam a `ControlsRow` de 46px — assim o visual
-// antigo não aparece em painel nenhum.
+// Control-center header (user's reference design): a row of radios (Wi-Fi ·
+// Bluetooth · Settings) and a row of modes (Focus · Night light · Power), with
+// 72px pills. It lives in `quick` and also at the top of `wifi`/`bt`, which used
+// to show the old 46px `ControlsRow`.
+//
+// In `wifi`/`bt` it runs in `compact` mode: only the radio row is kept. Those
+// views already show the open radio's own switch, status and device list just
+// below, so the second row (modes) is dead weight there and the radio's
+// "On/Off" subtitle would state the same thing twice. The pills double as the
+// panel switcher, so the pill of the panel you are currently in is drawn with a
+// left chevron and returns to `quick`.
 Item {
   id: header
 
   required property var bar
   readonly property var system: bar.system
 
+  // Single radio row; used by the `wifi` and `bt` views.
+  property bool compact: false
+
   readonly property int gap: 10
 
-  // 68 + 10 + 68: as duas fileiras.
-  implicitHeight: 146
+  // 68 + 10 + 68: the two rows; compact keeps only the first.
+  implicitHeight: header.compact ? 68 : 146
 
   // Pílula grande: círculo de ícone, título, estado e chevron. Ligada, o
   // círculo fica branco com a tinta escura.
@@ -29,6 +38,7 @@ Item {
     property string subtitle: ""
     property bool on: false
     property bool chevron: false
+    property string chevronGlyph: "caret-right"
     property bool interactive: true
 
     signal clicked
@@ -89,7 +99,7 @@ Item {
 
       PhIcon {
         visible: pill.chevron
-        glyph: "caret-right"
+        glyph: pill.chevronGlyph
         size: 14
         color: Tokens.neutral400
       }
@@ -149,9 +159,8 @@ Item {
     id: headerCol
     anchors.fill: parent
     spacing: header.gap
-    Component.onCompleted: console.log("QHCOL", width, height)
 
-    // Fileira 1: rádios conectados e Configurações.
+    // Row 1: connected radios and Settings.
     RowLayout {
       id: row1
       Layout.fillWidth: true
@@ -162,13 +171,16 @@ Item {
         visible: header.system.wifi.available
         glyph: header.system.wifi.radioOn ? "wifi-high-bold" : "wifi-slash-bold"
         title: I18n.tr("Wi-Fi")
+        // Compact drops the subtitle: `WifiView` already states it below.
         subtitle: {
+          if (header.compact) return "";
           const active = header.system.wifi.active;
           if (!header.system.wifi.radioOn) return I18n.tr("Off");
           return active !== null && active.ssid ? String(active.ssid) : I18n.tr("Not connected");
         }
         on: header.system.wifi.radioOn
         chevron: true
+        chevronGlyph: header.bar.mode === "wifi" ? "caret-left" : "caret-right"
         onClicked: header.bar.openFromBar(header.bar.targetScreen, header.bar.mode === "wifi" ? "quick" : "wifi")
       }
 
@@ -177,9 +189,10 @@ Item {
         visible: header.system.bluetooth.available
         glyph: "bluetooth-bold"
         title: I18n.tr("Bluetooth")
-        subtitle: header.system.bluetooth.radioOn ? I18n.tr("On") : I18n.tr("Off")
+        subtitle: header.compact ? "" : (header.system.bluetooth.radioOn ? I18n.tr("On") : I18n.tr("Off"))
         on: header.system.bluetooth.radioOn
         chevron: true
+        chevronGlyph: header.bar.mode === "bt" ? "caret-left" : "caret-right"
         onClicked: header.bar.openFromBar(header.bar.targetScreen, header.bar.mode === "bt" ? "quick" : "bt")
       }
 
@@ -193,11 +206,13 @@ Item {
       }
     }
 
-    // Fileira 2: modos e Energia.
+    // Row 2: modes and Power. Compact drops it: in `wifi`/`bt` the space belongs
+    // to the list of devices/networks.
     RowLayout {
       id: row2
       Layout.fillWidth: true
       spacing: header.gap
+      visible: !header.compact
 
       PanelPill {
         Layout.fillWidth: true

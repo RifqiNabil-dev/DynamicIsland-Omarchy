@@ -4,10 +4,10 @@ import QtQuick
 import QtQuick.Layouts
 import "../core/bluetooth.mjs" as BluetoothCore
 
-// Modo `bt` (specs/08-controles-rapidos.md): linha de controles · linha de
-// energia · divisor · seção com cabeçalho + switch e as listas "Meus
-// dispositivos" e "Disponíveis" numa área rolável só. A busca roda só
-// enquanto esta view existe no monitor-alvo.
+// Mode `bt` (specs/08-controles-rapidos.md): compact header (radio row only) ·
+// session row · divider · section with header + switch and the "My devices" and
+// "Available" lists in a single scrollable area. Scanning only runs while this
+// view exists on the target monitor.
 ColumnLayout {
   id: view
 
@@ -19,11 +19,17 @@ ColumnLayout {
   Component.onCompleted: bluetooth.searching = true
   Component.onDestruction: bluetooth.searching = false
 
+  // Header keeps 14px breathing room from the panel edge and 10px from the
+  // divider below, like the `quick` panel does.
   QuickHeader {
     Layout.fillWidth: true
     Layout.leftMargin: 14
     Layout.rightMargin: 14
+    Layout.topMargin: 14
+    Layout.bottomMargin: 10
     bar: view.bar
+    // Radio row only: this view owns the Bluetooth switch and the device list.
+    compact: true
   }
 
   PowerRow {

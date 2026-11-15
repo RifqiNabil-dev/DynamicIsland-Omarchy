@@ -4,12 +4,11 @@ import QtQuick
 import QtQuick.Layouts
 import "../core/wifi.mjs" as WifiCore
 
-// Modo `wifi` (specs/08-controles-rapidos.md "Modo `wifi`"; design v5): linha
-// de controles · linha de energia · divisor · cabeçalho da rede · estatísticas,
-// QR ou velocidade · DNS · redes conhecidas e outras, com o painel de senha
-// abaixo da rede escolhida. O estado do painel de senha, da vista e do DNS
-// personalizado mora no Bar.qml: é um só para todos os monitores e muda a
-// altura da ilha.
+// Mode `wifi` (specs/08-controles-rapidos.md "Modo `wifi`"; design v5):
+// compact header (radio row only) · session row · divider · network header ·
+// stats, QR or speed · DNS · known and other networks, with the password panel
+// below the chosen network. The password-panel, view and custom-DNS state lives
+// in Bar.qml: it is shared by every monitor and changes the island's height.
 ColumnLayout {
   id: view
 
@@ -20,11 +19,16 @@ ColumnLayout {
   spacing: 0
 
 
+  // Same breathing room as `bt`: 14px above, 10px below the radio row.
   QuickHeader {
     Layout.fillWidth: true
     Layout.leftMargin: 14
     Layout.rightMargin: 14
+    Layout.topMargin: 14
+    Layout.bottomMargin: 10
     bar: view.bar
+    // Radio row only: this view owns the Wi-Fi switch and the network list.
+    compact: true
   }
 
   PowerRow {

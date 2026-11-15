@@ -160,7 +160,9 @@ const LIST_MAX = 196;
  * divisor 11, lista até 196 (+ senha), 10; desligado: 160.
  */
 export function wifiPanelHeight(parts) {
-    const top = 146 + (parts.energyOpen ? 48 : 0) + 9 + 56;
+    // 92 = 14 + 68 + 10: the compact header (radio row only) plus its top and
+    // bottom margins. It used to be 146, the two-row header.
+    const top = 92 + (parts.energyOpen ? 48 : 0) + 9 + 56;
     if (parts.radioOn === false)
         return top + 160;
     const password = parts.passwordField === 'error' ? 76 : parts.passwordField === 'normal' ? 58 : 0;
