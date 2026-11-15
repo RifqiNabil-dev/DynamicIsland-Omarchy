@@ -233,6 +233,8 @@ export const ID = {
     Pair: 'Pasangkan',
     'Disconnecting…': 'Memutuskan…',
     'Pairing…': 'Memasangkan…',
+    'Forgetting…': 'Menghapus…',
+    'Forget?': 'Lupakan?',
     Display: 'Layar',
     Brightness: 'Kecerahan',
     'Text size': 'Ukuran teks',

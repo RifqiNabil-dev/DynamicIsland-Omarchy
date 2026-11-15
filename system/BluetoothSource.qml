@@ -59,6 +59,18 @@ Scope {
     runner.running = true;
   }
 
+  /**
+   * Forgets a paired device: the Omarchy script disconnects and drops the bond
+   * in BlueZ (`bluetoothctl remove`). The device then falls back into
+   * "Available" and the next use asks to pair again.
+   */
+  function forget(device) {
+    if (operation !== null || !BluetoothCore.canForget(device)) return;
+    operation = { path: device.path, kind: "forgetting" };
+    runner.command = ["omarchy-bluetooth-device", "forget", device.path];
+    runner.running = true;
+  }
+
   Process {
     id: runner
 

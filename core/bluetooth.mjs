@@ -58,6 +58,17 @@ export function btClickAction(device, busy) {
             return 'none';
     }
 }
+/**
+ * Forget only applies to a paired device that is not mid-operation: while
+ * pairing/connecting/disconnecting BlueZ is still touching the bond, and
+ * forgetting in the middle leaves the device in a state only a service restart
+ * fixes.
+ */
+export function canForget(device) {
+    if (!device.paired)
+        return false;
+    return device.status === 'connected' || device.status === 'disconnected';
+}
 /** Bateria só com o dispositivo conectado e o nível conhecido. */
 export function visibleBattery(device) {
     return device.connected ? device.battery : null;

@@ -97,6 +97,7 @@ ColumnLayout {
           width: lists.width
           device: modelData
           onClicked: view.bluetooth.activate(modelData)
+          onForget: view.bluetooth.forget(modelData)
         }
       }
 

@@ -12,16 +12,14 @@ Rectangle {
 
   signal clicked
 
+  // The row's click area sits *under* the content, not on top: that way a
+  // child with its own `MouseArea` (the forget button in `DeviceRow`) gets the
+  // click, and hover stays the row's because that button leaves
+  // `hoverEnabled` off.
+  readonly property alias hovered: pointer.containsMouse
+
   radius: 10
   color: active ? Tokens.accent900 : pointer.containsMouse ? Tokens.neutral900 : "transparent"
-
-  Item {
-    id: inner
-
-    anchors.fill: parent
-    anchors.leftMargin: 8
-    anchors.rightMargin: 8
-  }
 
   MouseArea {
     id: pointer
@@ -30,5 +28,13 @@ Rectangle {
     hoverEnabled: true
     cursorShape: Qt.PointingHandCursor
     onClicked: row.clicked()
+  }
+
+  Item {
+    id: inner
+
+    anchors.fill: parent
+    anchors.leftMargin: 8
+    anchors.rightMargin: 8
   }
 }
