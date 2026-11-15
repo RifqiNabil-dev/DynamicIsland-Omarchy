@@ -123,6 +123,7 @@ omarchy plugin enable alfath.island
 | Notification history | Click the bell |
 | Wi-Fi panel | Click the Wi-Fi icon |
 | Bluetooth panel | Click the Bluetooth tile in the quick panel |
+| Forget a Bluetooth device | The trash icon on a paired row, then the check mark (the cross, or 4s of silence, cancels) |
 | Mixer | Click the volume icon (scroll over it changes volume by 5%) |
 | Display | The monitor tile in the quick panel |
 | Power row | The power button, far right of the quick panel |
@@ -218,12 +219,15 @@ from `omarchy-weather-location`, and with no coordinates at all it detects the a
 | --- | --- |
 | `quick` | Brightness and volume sliders, Wi-Fi, Bluetooth, night light, Do Not Disturb, display, keep-awake, screen recording, dictation, settings, power |
 | `wifi` | Current network, known networks, other networks, QR share of the current network (open networks say so), DNS server, speed test; joining a network opens `nmtui-connect` in Omarchy's floating terminal |
-| `bt` | Adapter state, paired devices, scanning; pairing opens `bluetoothctl` in the floating terminal |
+| `bt` | Adapter state, paired devices (the trash icon forgets one after a confirm), scanning; pairing opens `bluetoothctl` in the floating terminal |
 | `mixer` | Outputs, per-application streams, microphone, mute |
 | `display` | Brightness, text size, monitor scale |
 | `weather` | Current condition, the next days' highs and lows, and a city search; the chosen city goes to `weatherLocation` |
 | `stack` | Notification history, with clear and dismiss |
 | power row | Suspend, restart, shut down, log out, lock — Omarchy's `omarchy-system-*` scripts |
+
+`wifi` and `bt` keep the pill row of the quick panel but render it compact: one row of pills, no
+modes or power row, and the pill of the panel you are in carries a caret back to the quick panel.
 
 Tiles whose hardware or service is missing simply do not appear: no backlight means the volume
 slider takes the brightness slot, no night light means no tile, no `voxtype` means no dictation
