@@ -76,6 +76,10 @@ export const ENV_ICONS = [
     'moon-stars',
     'barbell',
     'coffee',
+    // Omarchy mark: traced from the U+E900 glyph of
+    // /usr/share/omarchy/default/fonts/omarchy/omarchy.ttf, sitting with the
+    // Phosphor glyphs in icons/omarchy-symbolic.svg.
+    'omarchy',
 ];
 export const MAX_ENVIRONMENTS = 6;
 export const MAX_NAME_LENGTH = 20;
